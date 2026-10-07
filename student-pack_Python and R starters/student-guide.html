@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang xml:lang>
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>DCM · Code literacy I</title>
+  <style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+  <style type="text/css">body { max-width: 850px; margin: 50px auto; padding: 0 28px; font: 18px/1.6 'Liberation Sans', Arial, sans-serif; color: #17262b; }
+h1 { font-size: 38px; line-height: 1.15; color: #23373b; border-top: 5px solid #6a5acd; padding-top: 25px; }
+h2 { margin-top: 45px; color: #373895; } h3 { color: #465a65; }
+a { color: #a53d7c; } pre { background: #f5f7fa; padding: 18px 22px; border-radius: 10px; overflow-x: auto; }
+code { font-family: 'Liberation Mono', monospace; font-size: .88em; } blockquote { border-left: 5px solid #a53d7c; margin-left: 0; padding: 10px 20px; background: #f9f0f6; }
+table { border-collapse: collapse; width: 100%; } td,th { text-align: left; padding: 10px; border-bottom: 1px solid #dce0ed; }
+@media print { body { margin: 0; font-size: 11pt; } pre { white-space: pre-wrap; } h2,h3 { break-after: avoid; } }
+</style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">DCM · Code literacy I</h1>
+</header>
+<h1 id="code-literacy-i-read-change-and-check">Code literacy I — read,
+change and check</h1>
+<p>DCM · Week 4 · Thursday, 8 October 2026 · two 45-minute periods</p>
+<p>Use <strong>one language</strong>. Python is the live route; R is
+fully supported. Predict before running. Write down what you expect and
+what you checked. No report, GitHub login, paid AI account or second
+implementation is required today.</p>
+<h2 id="start">Start</h2>
+<p>Extract <code>student-pack.zip</code> to your own folder. Open that
+folder in VS Code. The same five-player historical teaching fixture is
+supplied in <code>tennis.py</code> and <code>tennis.R</code>. Do not
+replace it with current rankings.</p>
+<h3 id="before-class-check-your-chosen-route">Before class: check your
+chosen route</h3>
+<p><strong>Python:</strong> Python 3, NumPy and pandas. In the VS Code
+terminal, use your working launcher (<code>python3</code>,
+<code>python</code> or <code>py</code>):</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> <span class="at">-c</span> <span class="st">&quot;import numpy, pandas; print(numpy.__version__, pandas.__version__)&quot;</span></span></code></pre></div>
+<p>If an import fails, complete package setup in your chosen Python
+environment before class; ask for help with the exact command and error.
+No plotting package is needed for the core activity. Do not spend the
+exercise installing tools.</p>
+<p><strong>R:</strong> base R is enough. In the terminal, check
+<code>R --version</code>. No tidyverse, reticulate or Quarto
+installation is needed for these tasks.</p>
+<h3 id="open-the-supplied-table-in-a-fresh-session">Open the supplied
+table in a fresh session</h3>
+<p>Python, from the extracted folder’s terminal:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> <span class="at">-i</span> tennis.py</span></code></pre></div>
+<p>You now have a Python prompt (<code>&gt;&gt;&gt;</code>). Run the
+Python snippets there, one line or complete block at a time.
+<code>tennis</code> and <code>pd</code> are supplied by the starter;
+examples introduce <code>numpy as np</code> when needed. Restart this
+command for a fresh session. Do not type shell commands at the Python
+prompt; <code>exit()</code> returns you to the terminal. Printing is
+explicit in the guide where useful; a bare expression also displays its
+value at the interactive prompt.</p>
+<p>R: start R in this same folder, then run:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;tennis.R&quot;</span>)</span></code></pre></div>
+<p>You now have <code>tennis</code>. Run the R alternatives in that R
+session. Sourcing the starter again reconstructs the original table. In
+either language, preserve the starter file and make your changes in a
+separate practice file if you save them.</p>
+<p>If local execution is blocked, pair with a working machine and be the
+reviewer: write predictions, explain the code and inspect the actual
+output. Finish your own run later. The table on the slides also supports
+reading without a runtime; do not claim you personally ran code you only
+inspected.</p>
+<h2 id="read-the-objects">Read the objects</h2>
+<p>Start by reading the five-player table in your supplied starter: one
+player per row, birth date and title count in columns. The early
+examples use its title counts and the existing mixed-type coercion
+exercise. Try the snippets on the slides in order; answers follow the
+prediction, not before.</p>
+<h3 id="assignment-and-a-simple-summary">Assignment and a simple
+summary</h3>
+<p><strong>Python</strong></p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>grand_slam_win <span class="op">=</span> [<span class="dv">16</span>, <span class="dv">19</span>, <span class="dv">20</span>, <span class="dv">0</span>, <span class="dv">0</span>]</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>grand_slam_win</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="bu">len</span>(grand_slam_win)</span></code></pre></div>
+<p><strong>R alternative</strong></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>grand_slam_win <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">16</span>, <span class="dv">19</span>, <span class="dv">20</span>, <span class="dv">0</span>, <span class="dv">0</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>grand_slam_win</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(grand_slam_win)</span></code></pre></div>
+<p><strong>Python</strong></p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">sum</span>(grand_slam_win)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statistics <span class="im">as</span> st</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>st.mean(grand_slam_win)</span></code></pre></div>
+<p><strong>R alternative</strong></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(grand_slam_win)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(grand_slam_win)</span></code></pre></div>
+<h3 id="inspecting-and-coercing-types">Inspecting and coercing
+types</h3>
+<p>Predict which values remain numeric before running.</p>
+<p><strong>Python</strong></p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="bu">type</span>(<span class="fl">12.5</span>), <span class="bu">type</span>(<span class="dv">2</span>), <span class="bu">type</span>(<span class="va">True</span>), <span class="bu">type</span>(<span class="st">&quot;hi&quot;</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>val <span class="op">=</span> [<span class="va">True</span>, <span class="dv">2</span>, <span class="st">&quot;3&quot;</span>]</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>val</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>np.array(val)</span></code></pre></div>
+<p><strong>R alternative</strong></p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">typeof</span>(<span class="fl">12.5</span>); <span class="fu">typeof</span>(<span class="dv">2</span><span class="dt">L</span>); <span class="fu">typeof</span>(<span class="cn">TRUE</span>); <span class="fu">typeof</span>(<span class="st">&quot;hi&quot;</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>val <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="dv">2</span>, <span class="st">&quot;3&quot;</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>val</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">typeof</span>(val)</span></code></pre></div>
+<h3 id="inspect-the-supplied-table">Inspect the supplied table</h3>
+<p><strong>Python</strong></p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Start from the supplied tennis.py</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(tennis)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>tennis.info()</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>tennis.shape</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="bu">list</span>(tennis.columns)</span></code></pre></div>
+<p><strong>R alternative</strong></p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Start from the supplied tennis.R</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>tennis</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(tennis)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(tennis)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(tennis)</span></code></pre></div>
+<p>The original table has five player labels and two columns,
+<code>date_of_birth</code> (initially text) and
+<code>grand_slam_win</code> (numeric). Counts are 16, 19, 20, 0, 0, as
+supplied in the historical lecture. Reference date: <strong>30 September
+2019</strong>. Zero is an observed count, not a missing value.</p>
+<h3 id="select-by-position-label-column-and-condition">Select by
+position, label, column and condition</h3>
+<p>In pandas, <code>.iloc</code> means position and <code>.loc</code>
+means label. Both examples select Nadal in this original table. After
+sorting, the second row may be someone else. Python positions start at
+0; R positions start at 1.</p>
+<p><strong>Python</strong></p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>tennis.iloc[<span class="dv">1</span>]                 <span class="co"># second row, by position</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>tennis.loc[<span class="st">&quot;Rafael Nadal&quot;</span>]     <span class="co"># row with this label</span></span></code></pre></div>
+<p><strong>R alternative</strong></p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>tennis[<span class="dv">2</span>, ]                    <span class="co"># second row, by position</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>tennis[<span class="st">&quot;Rafael Nadal&quot;</span>, ]       <span class="co"># row with this name</span></span></code></pre></div>
+<p><strong>Python</strong></p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>wins <span class="op">=</span> tennis[<span class="st">&quot;grand_slam_win&quot;</span>]</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>cols <span class="op">=</span> tennis[[<span class="st">&quot;grand_slam_win&quot;</span>, <span class="st">&quot;date_of_birth&quot;</span>]]</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(cols)</span></code></pre></div>
+<p><strong>R alternative</strong></p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>wins <span class="ot">&lt;-</span> tennis[[<span class="st">&quot;grand_slam_win&quot;</span>]]</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>cols <span class="ot">&lt;-</span> tennis[<span class="fu">c</span>(<span class="st">&quot;grand_slam_win&quot;</span>, <span class="st">&quot;date_of_birth&quot;</span>)]</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>cols</span></code></pre></div>
+<p><strong>Python</strong></p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>mask <span class="op">=</span> tennis[<span class="st">&quot;grand_slam_win&quot;</span>] <span class="op">&gt;</span> <span class="dv">0</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>positive <span class="op">=</span> tennis.loc[mask]</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(mask)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(positive)</span></code></pre></div>
+<p><strong>R alternative</strong></p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>mask <span class="ot">&lt;-</span> tennis<span class="sc">$</span>grand_slam_win <span class="sc">&gt;</span> <span class="dv">0</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>positive <span class="ot">&lt;-</span> tennis[mask, ]</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>mask</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>positive</span></code></pre></div>
+<h2 id="quick-wins">Quick wins</h2>
+<p><strong>5 minutes working + 3 minutes debrief.</strong> Use the
+existing values 3, 6, 9, 12.</p>
+<ol type="1">
+<li>Predict the second value, last value and descending order without
+running.</li>
+<li>Select the second value by position, then the last value. Explain
+what each selection means.</li>
+<li>Sort with the built-in sorter. Run and compare your result with a
+partner.</li>
+</ol>
+<p>Starter: Python <code>x = [3, 6, 9, 12]</code>; R
+<code>x &lt;- c(3, 6, 9, 12)</code>. Hints: Python
+<code>sorted(x, reverse=True)</code>; R
+<code>sort(x, decreasing = TRUE)</code>.</p>
+<details>
+<summary>
+Worked answers — open after your attempt
+</summary>
+<p><strong>Python</strong></p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> [<span class="dv">3</span>, <span class="dv">6</span>, <span class="dv">9</span>, <span class="dv">12</span>]</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>x[<span class="dv">1</span>]                         <span class="co"># second value</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>x[<span class="op">-</span><span class="dv">1</span>]                        <span class="co"># last value</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="bu">sorted</span>(x, reverse<span class="op">=</span><span class="va">True</span>)</span></code></pre></div>
+<p><strong>R alternative</strong></p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">6</span>, <span class="dv">9</span>, <span class="dv">12</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>x[<span class="dv">2</span>]                         <span class="co"># second value</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(x, <span class="dv">1</span>)                   <span class="co"># last value</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="fu">sort</span>(x, <span class="at">decreasing =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p>Expected: second 6; last 12; descending values 12, 9, 6, 3. Explain
+which values were selected. The sorter returns a reordered sequence;
+<code>x</code> stays unchanged unless you assign the result back to
+it.</p>
+</details>
+<h2 id="tennis-task">Tennis task</h2>
+<p><strong>10 minutes working + 4 minutes debrief/checking
+associations.</strong> Start with the supplied five-player
+<code>tennis</code> table. This task adapts the first historical tennis
+challenge; no later ranking dataset is used. We read the supplied date
+calculation rather than learn a date library from scratch.</p>
+<h3 id="supplied-transformation-add-approximate-age">Supplied
+transformation: add approximate age</h3>
+<p>Predict the number of rows and columns before running:</p>
+<p><strong>Python</strong></p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>work <span class="op">=</span> tennis.copy()</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>work[<span class="st">&quot;date_of_birth&quot;</span>] <span class="op">=</span> pd.to_datetime(work[<span class="st">&quot;date_of_birth&quot;</span>])</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>ref_date <span class="op">=</span> pd.Timestamp(<span class="st">&quot;2019-09-30&quot;</span>)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>work[<span class="st">&quot;age_years&quot;</span>] <span class="op">=</span> (</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>    (ref_date <span class="op">-</span> work[<span class="st">&quot;date_of_birth&quot;</span>]).dt.days <span class="op">/</span> <span class="fl">365.2425</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>work.shape</span></code></pre></div>
+<p><strong>R alternative</strong></p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>work <span class="ot">&lt;-</span> tennis</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>work<span class="sc">$</span>date_of_birth <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(work<span class="sc">$</span>date_of_birth)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>ref_date <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(<span class="st">&quot;2019-09-30&quot;</span>)</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>work<span class="sc">$</span>age_years <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">difftime</span>(ref_date, work<span class="sc">$</span>date_of_birth, <span class="at">units =</span> <span class="st">&quot;days&quot;</span>)</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>) <span class="sc">/</span> <span class="fl">365.2425</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(work)</span></code></pre></div>
+<p><code>work</code> is an edited copy; <code>tennis</code> should
+remain unchanged. The result is approximate age in years at the fixed
+reference date, not completed birthdays or current age. Dates and title
+counts keep the same player associations.</p>
+<h3 id="select-modify-sort-and-check">Select, modify, sort and
+check</h3>
+<ol type="1">
+<li><strong>3 minutes:</strong> run the supplied transformation. Keep
+players with more than zero titles and sort their whole rows by age,
+oldest first.</li>
+<li><strong>4 minutes:</strong> change the condition to <strong>at least
+19</strong> titles. Before running, predict which players remain.
+Display only title count and age for the result.</li>
+<li><strong>3 minutes:</strong> check the original/derived row counts,
+retained names and each player’s title count. Explain your condition
+change to a partner.</li>
+</ol>
+<p>Starting code to adapt (choose one language):</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>positive <span class="op">=</span> work.loc[work[<span class="st">&quot;grand_slam_win&quot;</span>] <span class="op">&gt;</span> <span class="dv">0</span>]</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>ranked <span class="op">=</span> positive.sort_values(<span class="st">&quot;age_years&quot;</span>, ascending<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(ranked[[<span class="st">&quot;grand_slam_win&quot;</span>, <span class="st">&quot;age_years&quot;</span>]])</span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>positive <span class="ot">&lt;-</span> work[work<span class="sc">$</span>grand_slam_win <span class="sc">&gt;</span> <span class="dv">0</span>, ]</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>ranked <span class="ot">&lt;-</span> positive[<span class="fu">order</span>(<span class="sc">-</span>positive<span class="sc">$</span>age_years), ]</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>ranked[<span class="fu">c</span>(<span class="st">&quot;grand_slam_win&quot;</span>, <span class="st">&quot;age_years&quot;</span>)]</span></code></pre></div>
+<p><code>&gt;</code> means greater than; <code>&gt;=</code> means
+greater than or equal to. Change the condition, not the original data.
+Sorting a column by itself would lose the intended row association: sort
+the table, then select the columns you want to display.</p>
+<details>
+<summary>
+Checks and worked solution — open after your attempt
+</summary>
+<p><strong>Python</strong></p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>positive <span class="op">=</span> work.loc[work[<span class="st">&quot;grand_slam_win&quot;</span>] <span class="op">&gt;</span> <span class="dv">0</span>]</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>ranked <span class="op">=</span> positive.sort_values(<span class="st">&quot;age_years&quot;</span>, ascending<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>selected <span class="op">=</span> work.loc[work[<span class="st">&quot;grand_slam_win&quot;</span>] <span class="op">&gt;=</span> <span class="dv">19</span>]</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>selected <span class="op">=</span> selected.sort_values(<span class="st">&quot;age_years&quot;</span>, ascending<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(selected[[<span class="st">&quot;grand_slam_win&quot;</span>, <span class="st">&quot;age_years&quot;</span>]])</span></code></pre></div>
+<p><strong>R alternative</strong></p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>positive <span class="ot">&lt;-</span> work[work<span class="sc">$</span>grand_slam_win <span class="sc">&gt;</span> <span class="dv">0</span>, ]</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>ranked <span class="ot">&lt;-</span> positive[<span class="fu">order</span>(<span class="sc">-</span>positive<span class="sc">$</span>age_years), ]</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>selected <span class="ot">&lt;-</span> work[work<span class="sc">$</span>grand_slam_win <span class="sc">&gt;=</span> <span class="dv">19</span>, ]</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>selected <span class="ot">&lt;-</span> selected[<span class="fu">order</span>(<span class="sc">-</span>selected<span class="sc">$</span>age_years), ]</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>selected[<span class="fu">c</span>(<span class="st">&quot;grand_slam_win&quot;</span>, <span class="st">&quot;age_years&quot;</span>)]</span></code></pre></div>
+<ul>
+<li>Original <code>tennis</code>: 5 rows × 2 columns; historical title
+total 55.</li>
+<li><code>work</code> after age assignment: 5 rows × 3 columns. Original
+remains unchanged.</li>
+<li>More than zero titles: Federer (20), Nadal (19), Djokovic (16),
+oldest first.</li>
+<li>At least 19 titles: Federer (20), Nadal (19), oldest first.</li>
+<li>Final ages approximately 38.14 and 33.33. Keep full precision in the
+calculation.</li>
+</ul>
+<p>Check that each birth date and title count still belongs to the same
+named player; a correct row count alone cannot establish this.</p>
+</details>
+<h3 id="why-row-count-alone-is-insufficient">Why row count alone is
+insufficient</h3>
+<p>A deliberately wrong operation on a disposable copy (predict before
+running):</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>broken <span class="op">=</span> work.copy()</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>broken[<span class="st">&quot;grand_slam_win&quot;</span>] <span class="op">=</span> <span class="bu">sorted</span>(work[<span class="st">&quot;grand_slam_win&quot;</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>broken <span class="ot">&lt;-</span> work</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>broken<span class="sc">$</span>grand_slam_win <span class="ot">&lt;-</span> <span class="fu">sort</span>(work<span class="sc">$</span>grand_slam_win)</span></code></pre></div>
+<p>Five rows and 55 total titles remain, but Djokovic now has 0 rather
+than 16 and Federer 16 rather than 20. The sorted counts were attached
+by position to unchanged player rows. Sort the <strong>whole
+table</strong> so names, birth dates, titles and ages move together.
+Keep this incorrect <code>broken</code> copy separate from the real
+result.</p>
+<p><strong>Optional after the core task:</strong> use the original
+challenge’s wins-versus-age plot if you already know the plotting tools.
+Explain which rows you are plotting. No plotting installation or chart
+is required for Week 4.</p>
+<h2 id="understanding-missing-value-behavior">Understanding
+missing-value behavior</h2>
+<p>In our tennis fixture, <strong>0 Grand Slam titles is an observed
+value</strong>. An unknown or unrecorded title count would be missing.
+Missing is not zero. Empty text is not automatically missing either.
+Detecting missing values and deciding what to do about them are separate
+tasks. Use the explicit missing-value test, not equality to
+<code>NA</code>/<code>NaN</code>.</p>
+<p><strong>Python</strong></p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>sample <span class="op">=</span> np.array([<span class="dv">2</span>, np.nan, <span class="dv">4</span>])</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>np.isnan(sample)</span></code></pre></div>
+<p><strong>R alternative</strong></p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>sample <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="cn">NA</span>, <span class="dv">4</span>)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">is.na</span>(sample)</span></code></pre></div>
+<p><strong>Python</strong></p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>np.mean(sample)</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>np.nanmean(sample)</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>pd.Series(sample).mean()</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>pd.Series(sample).mean(skipna<span class="op">=</span><span class="va">False</span>)</span></code></pre></div>
+<p><strong>R alternative</strong></p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(sample)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(sample, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p>For 2, missing, 4: ordinary R/NumPy mean is missing. The explicit
+missing-skipping mean is 3, with denominator 2. A pandas floating-point
+Series mean skips missing values by default here;
+<code>skipna=False</code> instead propagates missingness. Always
+identify the library and denominator. A default is not a
+justification.</p>
+<h2 id="better-performance-better-learning">Better performance ≠ better
+learning?</h2>
+<p><strong>Five-minute discussion before the activity.</strong> If AI
+helps students complete an exercise, do you expect greater understanding
+too? Predict, then discuss the Bassner et al. (2026) finding on the
+slide: higher task scores and less frustration without a detected
+advantage in knowledge gains or code comprehension in that setting. The
+practical response is to keep predicting and checking while using
+AI.</p>
+<h2 id="ai-activity">AI activity</h2>
+<p><strong>12 minutes total.</strong> Use the original masking exercise
+below. It is an artificial mechanics example: replacing odd values is
+<strong>not</strong> a recommended real-data cleaning rule. Remainder
+(<code>%</code> in Python, <code>%%</code> in R) identifies odd values
+here.</p>
+<h3 id="minutes-03-predict-without-running-and-without-ai">Minutes 0–3:
+predict without running and without AI</h3>
+<p>Read the snippet in your chosen language. Annotate the construction,
+mask and assignment. Predict the values, length, number missing and
+number observed. Does this remove elements or replace their values?
+Write your prediction first.</p>
+<p><strong>Python</strong></p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.arange(<span class="dv">1</span>, <span class="dv">11</span>, dtype<span class="op">=</span><span class="bu">float</span>)</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>x[x <span class="op">%</span> <span class="dv">2</span> <span class="op">==</span> <span class="dv">1</span>] <span class="op">=</span> np.nan</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>x</span></code></pre></div>
+<p><strong>R alternative</strong></p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>x[x <span class="sc">%%</span> <span class="dv">2</span> <span class="sc">==</span> <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="cn">NA_integer_</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>x</span></code></pre></div>
+<h3 id="minutes-35-ask-for-explanation-then-compare">Minutes 3–5: ask
+for explanation, then compare</h3>
+<p>Name the language and library, paste the existing snippet, and use
+this prompt:</p>
+<blockquote>
+<p>Explain this R/Python snippet line by line without changing it.
+Predict its values, length and missing-value count. Does it remove
+observations or replace values? What does the mean include by default in
+this specific library, and what should I check myself? State any
+assumptions.</p>
+</blockquote>
+<p>Do not request a rewrite. Identify an agreement, disagreement or
+unsupported claim by comparing the response with your written
+prediction.</p>
+<p><strong>No AI access:</strong> compare with a partner’s explanation
+and perform the same checks. The instructor may show an available
+response. No paid account, agent installation or AI login is required.
+Do not spend the activity troubleshooting access.</p>
+<h3 id="minutes-59-run-the-original-code-and-verify">Minutes 5–9: run
+the original code and verify</h3>
+<p>Run the original snippet above, then inspect its displayed values.
+Use the checks below and verify the retained-value sum by hand. The
+Python session also needs <code>import pandas as pd</code> (already
+supplied by <code>tennis.py</code>).</p>
+<p><strong>Python</strong></p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="bu">len</span>(x), np.isnan(x).<span class="bu">sum</span>(), (<span class="op">~</span>np.isnan(x)).<span class="bu">sum</span>()</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>np.nansum(x)</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>np.mean(x), np.nanmean(x)</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>pd.Series(x).mean()</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>np.nan_to_num(x, nan<span class="op">=</span><span class="dv">0</span>).mean()</span></code></pre></div>
+<p><strong>R alternative</strong></p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(x); <span class="fu">sum</span>(<span class="fu">is.na</span>(x)); <span class="fu">sum</span>(<span class="sc">!</span><span class="fu">is.na</span>(x))</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(x); <span class="fu">mean</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>zero_filled <span class="ot">&lt;-</span> x</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>zero_filled[<span class="fu">is.na</span>(zero_filled)] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(zero_filled)</span></code></pre></div>
+<p>The last comparison replaces missing values by zero in a separate
+result. It illustrates changed meaning; it is not advice to fill real
+missing observations. The NumPy example contains only finite values and
+<code>NaN</code>.</p>
+<h3 id="minutes-912-debrief">Minutes 9–12: debrief</h3>
+<details>
+<summary>
+Expected checks — open after prediction and execution
+</summary>
+<ul>
+<li>Length 10; missing 5; observed 5.</li>
+<li>Displayed values: missing, 2, missing, 4, missing, 6, missing, 8,
+missing, 10.</li>
+<li>Observed values sum to 30. Their mean is 6 = 30 / 5.</li>
+<li>Ordinary R/NumPy mean is missing; pandas mean here is 6.</li>
+<li>Replacing missing by zero gives 3 = 30 / 10, a different denominator
+and question.</li>
+</ul>
+</details>
+<p>Spend at most one minute on this question: <strong>“I ask one AI to
+write the code and another to check it. Have I independently verified
+it?”</strong> Li et al. (2026) reports students delegating checks to AI;
+these are reported practices, not evidence of check reliability. Model
+agreement can help review, but provide your own comparison with the
+data, expected values and a manual sum before accepting the claim.</p>
+<p>State one claim you independently verified and one analytical
+decision the code cannot justify. Computational correctness does not
+justify discarding or replacing observations in a real dataset.</p>
+<p><strong>AI can explain code; the analyst remains responsible for
+understanding the operation and validating the output.</strong></p>
+<h2 id="exit-check">Exit check</h2>
+<ol type="1">
+<li>What are the input and the operation?</li>
+<li>What should change — and what must NOT change?</li>
+<li>What evidence tells me the result is correct? Keep the tennis edit
+and your prediction/check notes. Next week, 15 October: control flow,
+functions and debugging in Code Literacy II.</li>
+</ol>
+<h2 id="discussion-sources">Discussion sources</h2>
+<ul>
+<li>Bassner, P., Lenk-Ostendorf, B., Beinstingel, R., Wasner, T., &amp;
+Krusche, S. (2026). <em>Less stress, better scores, same learning: The
+dissociation of performance and learning in AI-supported programming
+education</em>. Computers and Education: Artificial Intelligence, 10,
+100537. <a href="https://doi.org/10.1016/j.caeai.2025.100537">DOI</a>.</li>
+<li>Li, S., Tang, J., Qiang, Z., &amp; Wang, Z. (2026). <em>Examining
+Computer-Science Students’ Metacognitive Beliefs and Reported Practices
+in Verifying AI-Generated Code: A Concurrent Mixed-Methods Study</em>.
+Journal of Intelligence, 14(10), 232. <a href="https://doi.org/10.3390/jintelligence14100232">DOI</a>.</li>
+</ul>
+<p>No full-paper reading or AI account is required for these
+discussions.</p>
+</body>
+</html>

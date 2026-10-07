@@ -1,0 +1,3 @@
+Number of orders: 3
+Total revenue (CHF): 37.50
+Average order value (CHF): 12.50

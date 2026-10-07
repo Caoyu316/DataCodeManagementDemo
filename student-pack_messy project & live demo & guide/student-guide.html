@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang xml:lang>
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>DCM · Reproducibility practice</title>
+  <style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+  <style type="text/css">body { max-width: 850px; margin: 50px auto; padding: 0 28px; font: 18px/1.6 'Liberation Sans', Arial, sans-serif; color: #17262b; }
+h1 { font-size: 38px; line-height: 1.15; color: #23373b; border-top: 5px solid #6a5acd; padding-top: 25px; }
+h2 { margin-top: 45px; color: #373895; } h3 { color: #465a65; }
+a { color: #a53d7c; } pre { background: #f5f7fa; padding: 18px 22px; border-radius: 10px; overflow-x: auto; }
+code { font-family: 'Liberation Mono', monospace; font-size: .88em; } blockquote { border-left: 5px solid #a53d7c; margin-left: 0; padding: 10px 20px; background: #f9f0f6; }
+table { border-collapse: collapse; width: 100%; } td,th { text-align: left; padding: 10px; border-bottom: 1px solid #dce0ed; }
+@media print { body { margin: 0; font-size: 11pt; } pre { white-space: pre-wrap; } h2,h3 { break-after: avoid; } }
+</style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">DCM · Reproducibility practice</h1>
+</header>
+<h1 id="from-a-folder-to-a-handover">From a folder to a handover</h1>
+<p>Data and Code Management · Thursday, 1 October 2026 · two 45-minute
+blocks</p>
+<p>Today you will diagnose a small project and record a reviewed
+improvement to its README. Last week introduced the course; today starts
+the practical workflow. R and Python projects use the same habits.
+<strong>The required Git edits are plain text: Git and a text editor are
+enough.</strong> Python is used for the instructor’s runnable
+demonstration; it is optional for your documentation exercise.</p>
+<h2 id="before-class-get-an-ordinary-project-folder">Before class: get
+an ordinary project folder</h2>
+<p>Download and extract the current <code>student-pack.zip</code> into a
+new personal folder, for example <code>Documents/dcm-week3</code>. Use
+your file manager; work in the extracted folder, not inside the ZIP.
+Keep it outside any existing Git repository. The pack contains
+<code>messy-project/</code> and <code>live-demo/</code>, with <strong>no
+Git history</strong>. Use the clean <code>live-demo/</code> for Git
+practice; leave the messy specimen alone. If you already have an older
+copy, extract to a new location and keep your work.</p>
+<p>Complete the course website’s VS Code/Git setup, including your
+commit author name and email. No Python, GitHub account or network
+connection is needed for this local exercise. Do not clone a bundle or
+set up a remote.</p>
+<p>If Git is unavailable, pair with someone whose setup works. Be the
+reviewer: read the files, dictate the change, interpret the actual diff
+and write down the checks. Finish your own local commit afterwards. Do
+not spend practical time on GitHub authentication or an AI account.</p>
+<h2 id="activity-1-diagnose-the-messy-project-15-minutes">Activity 1:
+diagnose the messy project (15 minutes)</h2>
+<p>Open <code>messy-project/</code> beside this guide. This is a
+deliberately broken handover; <strong>inspect it rather than run
+it</strong>. The task is to calculate total revenue across <strong>all
+four original orders</strong>. The records are synthetic CHF
+amounts.</p>
+<ol type="1">
+<li><strong>4 minutes — inspect.</strong> Identify at least four
+reproducibility blockers. Which files are source, code or generated
+output? Which roles are uncertain? Which path is fragile? What manual
+step is hidden?</li>
+<li><strong>6 minutes — propose.</strong> Sketch a small repaired folder
+tree and write four short README answers: purpose, data, run procedure,
+expected output. Mark any run instruction you have not yet tested as a
+proposal, not a verified command.</li>
+<li><strong>5 minutes — hand over.</strong> Swap with a partner. Can
+they locate the input and entry point? What still prevents a fresh
+rerun? Leave one question for the author.</li>
+</ol>
+<p>Write your plan on paper or in a separate note. No code repair is
+required. Deliverable: a diagnosis, a proposed tree, four README answers
+and one open question.</p>
+<h3 id="browserpaper-fallback-exact-specimen-contents">Browser/paper
+fallback: exact specimen contents</h3>
+<p><code>original_orders.csv</code>:</p>
+<pre class="csv"><code>order_id,amount_chf
+1,10.00
+2,15.00
+3,12.50
+4,12.50</code></pre>
+<p><code>orders.csv</code>:</p>
+<pre class="csv"><code>order_id,amount_chf
+1,10.00
+2,15.00
+3,12.50</code></pre>
+<p><code>analysis_final.py</code>:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Deliberately fragile handover specimen: inspect rather than run.</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> csv</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">&#39;/Users/analyst/Desktop/orders.csv&#39;</span>) <span class="im">as</span> source:</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    amounts <span class="op">=</span> [<span class="bu">float</span>(row[<span class="st">&#39;amount_chf&#39;</span>]) <span class="cf">for</span> row <span class="kw">in</span> csv.DictReader(source)]</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">sum</span>(amounts))</span></code></pre></div>
+<p><code>summary_final.txt</code>:</p>
+<pre class="text"><code>Number of orders: 3
+Total revenue (CHF): 37.50
+Average order value (CHF): 12.50</code></pre>
+<p><code>report_FINAL.md</code>:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Orders report — final</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>We received four orders, with total revenue of CHF 50.00.</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>Average order value was CHF 12.50.</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>Numbers copied from the console before sending the folder.</span></code></pre></div>
+<p><code>notes.txt</code>:</p>
+<pre class="text"><code>Use my cleaned orders.csv. I removed one row in the spreadsheet.
+Run analysis_final.py after cleaning. Python is installed on my laptop.
+I copied the result into the report. The report is the final version, I think.</code></pre>
+<h2 id="git-practice">Git practice</h2>
+<p>Use <strong>live-demo/</strong>, the ordinary clean folder you
+extracted. It supplies a runnable entry point and a useful README. You
+are improving its handover, not repairing the broken specimen.</p>
+<h3 id="required-git-practice-one-reviewed-improvement-15-minutes">Required
+Git practice: one reviewed improvement (15 minutes)</h3>
+<p><strong>Start — 4 min.</strong> In VS Code, choose <strong>File →
+Open Folder</strong> and select <code>live-demo/</code> itself. Open
+<strong>Terminal → New Terminal</strong>. Your terminal must be at the
+project root, where <code>README.md</code>, <code>data/</code>,
+<code>src/</code> and <code>.gitignore</code> live. Run one command at a
+time:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> init</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span></code></pre></div>
+<p>Expected: <strong>no commits yet</strong>, with untracked files. Git
+created a hidden <code>.git/</code> directory for its metadata; leave it
+alone. Nothing was uploaded. If status shows an existing history or
+unrelated files, stop and check which folder you opened; do not delete
+previous work. The default branch name may vary; that is fine.</p>
+<p><strong>Record the project as received in a starting/baseline commit
+before editing.</strong> Read the README, the raw CSV and the small
+source files. The CSV has four rows: 10.00, 15.00, 12.50 and 12.50 CHF.
+These are safe synthetic data. <code>.gitignore</code> excludes
+generated outputs. Here <code>git add .</code> stages the non-ignored
+contents of this extracted project; check the staged files before
+committing. Ordinary <code>git diff</code> does not show untracked
+files: first record the supplied project so Git has a before-version to
+compare with your README edit.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add .</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> diff <span class="at">--staged</span></span></code></pre></div>
+<p>Inspect the listed files and their contents. Press <code>q</code> if
+Git opens a paged view. When only the intended starter files are staged,
+record them:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">&quot;Record starting project&quot;</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span></code></pre></div>
+<p>Expected: one starting/baseline commit and a clean working tree. If
+Git asks for your identity, follow the course setup page; your author
+name/email are not a GitHub login. Keep the generated
+<code>outputs/</code> and any private files out of the snapshot.</p>
+<p><strong>Edit — 2 min.</strong> In README, replace the arithmetic TODO
+under <strong>Expected result</strong> with your own explanation showing
+count, total and average. Keep the data and code unchanged. Save the
+file.</p>
+<p><strong>Review and record — 6 min.</strong> Run:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> diff</span></code></pre></div>
+<p>Check that only the intended README paragraph changed. Read additions
+<strong>and</strong> deletions. Independently calculate 10.00 + 15.00 +
+12.50 + 12.50 and compare it with the README claim; also check 50.00 / 4
+= 12.50. Confirm the raw CSV and documented paths agree with that
+claim.</p>
+<p>If you already have Python, also follow the README and run
+<code>python3 src/summarize.py</code> then
+<code>python3 src/check_summary.py</code> (or your working
+<code>python</code> / <code>py</code> launcher). The analysis creates
+the output; the checker independently inspects that saved file. Without
+Python, complete the file/claim review now and observe the instructor’s
+rerun; <strong>do not claim that you personally executed the
+project</strong>.</p>
+<p>Then run these commands individually:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add README.md</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> diff <span class="at">--staged</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">&quot;Clarify expected output in README&quot;</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> log <span class="at">--oneline</span></span></code></pre></div>
+<p>Check the staged diff before committing. If you edit again after
+staging, review and stage the revised README again. Commit records the
+staged version.</p>
+<p><strong>Explain — 3 min.</strong> Show a partner your changed line,
+the independent check and the reviewed change in the log. Expected:
+clean status and two commits: the starting/baseline commit and the
+reviewed README change. Commit IDs differ between students; the message
+and content matter.</p>
+<h2 id="command-card">Command card</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Command</th>
+<th>Question/action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>git init</code></td>
+<td>Start local version control in this project folder; no commit
+yet.</td>
+</tr>
+<tr>
+<td><code>git status</code></td>
+<td>Which files are new, modified or staged?</td>
+</tr>
+<tr>
+<td><code>git diff</code></td>
+<td>Show unstaged changes to tracked files.</td>
+</tr>
+<tr>
+<td><code>git add README.md</code></td>
+<td>Select the current README content for the next commit.</td>
+</tr>
+<tr>
+<td><code>git diff --staged</code></td>
+<td>Show the changes selected for the next commit.</td>
+</tr>
+<tr>
+<td><code>git commit -m &quot;Explain the change&quot;</code></td>
+<td>Record the selected snapshot locally.</td>
+</tr>
+<tr>
+<td><code>git log --oneline</code></td>
+<td>Inspect recorded history.</td>
+</tr>
+</tbody>
+</table>
+<p>If Git opens a paged view of a long diff/log, press <code>q</code> to
+return to the prompt. Students do not need to memorize command
+options.</p>
+<p>This exercise has no remote. Your local reviewed commit is the
+required deliverable. The instructor will show how that reviewed history
+can be shared; remote commands are not required in your activity.</p>
+<p>Git ignores the generated <code>outputs/</code> directory in this
+project. Code, README, checks and this tiny synthetic CSV are versioned.
+Large or sensitive data need a documented access strategy. Ignoring a
+file does not remove a previously committed version. Keep credentials
+out of project history.</p>
+<h2 id="from-local-history-to-a-shared-handover">From local history to a
+shared handover</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Command</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>git clone</code></td>
+<td>Copy an existing repository and history into a new local
+folder.</td>
+</tr>
+<tr>
+<td><code>git remote -v</code></td>
+<td>See the connected repository URLs; <code>origin</code> is the usual
+remote name.</td>
+</tr>
+<tr>
+<td><code>git push</code></td>
+<td>Send recorded commits to the configured remote. Saved/staged edits
+stay local.</td>
+</tr>
+<tr>
+<td><code>git pull</code></td>
+<td>Fetch and integrate remote changes into the current branch of an
+existing clone.</td>
+</tr>
+</tbody>
+</table>
+<p>A new local project starts with <code>git init</code>; an existing
+shared project starts with <code>git clone</code>, which already creates
+the local repository.</p>
+<p>GitHub hosts shared history so another person can read the README,
+inspect a commit and its diff, then clone and try a fresh run.
+Coordinate changes before pulling; start with a clean working tree.
+Software and ignored data still need the README’s instructions. Branch
+and pull-request workflows return later. No GitHub account, remote setup
+or push is required for today’s student task.</p>
+<h2 id="before-next-week">Before next week</h2>
+<p>Keep your diagnosis and reviewed commits. Be ready to explain the
+source data, entry point, expected output and one diff. If you paired
+because Git was blocked, complete your own local commit before the next
+session. On <strong>8 October</strong> we start code literacy; you do
+not need to implement this example in both R and Python.</p>
+<p>Reference: <a href="https://git-scm.com/docs/git-diff">Git diff
+documentation</a>.</p>
+</body>
+</html>

@@ -1,0 +1,3 @@
+Use my cleaned orders.csv. I removed one row in the spreadsheet.
+Run analysis_final.py after cleaning. Python is installed on my laptop.
+I copied the result into the report. The report is the final version, I think.

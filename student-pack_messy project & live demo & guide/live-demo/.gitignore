@@ -1,0 +1,7 @@
+# Recreated by running the analysis
+outputs/
+# Python caches
+__pycache__/
+*.pyc
+# Local secrets
+.env
