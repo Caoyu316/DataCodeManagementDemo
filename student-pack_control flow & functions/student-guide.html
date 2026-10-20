@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang xml:lang>
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>DCM · Code literacy II</title>
+  <style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+  <style type="text/css">body { max-width: 850px; margin: 50px auto; padding: 0 28px; font: 18px/1.6 'Liberation Sans', Arial, sans-serif; color: #17262b; }
+h1 { font-size: 38px; line-height: 1.15; color: #23373b; border-top: 5px solid #6a5acd; padding-top: 25px; }
+h2 { margin-top: 45px; color: #373895; } h3 { color: #465a65; }
+a { color: #a53d7c; } pre { background: #f5f7fa; padding: 18px 22px; border-radius: 10px; overflow-x: auto; }
+code { font-family: 'Liberation Mono', monospace; font-size: .88em; } blockquote { border-left: 5px solid #a53d7c; margin-left: 0; padding: 10px 20px; background: #f9f0f6; }
+table { border-collapse: collapse; width: 100%; } td,th { text-align: left; padding: 10px; border-bottom: 1px solid #dce0ed; }
+@media print { body { margin: 0; font-size: 11pt; } pre { white-space: pre-wrap; } h2,h3 { break-after: avoid; } }
+</style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">DCM · Code literacy II</h1>
+</header>
+<h1 id="code-literacy-ii-trace-modify-and-verify">Code literacy II —
+trace, modify and verify</h1>
+<p>DCM · Week 5 · Thursday, 15 October 2026 · two 45-minute periods</p>
+<p>Use <strong>one language</strong>. In the HTML deck, click “R
+alternative” to switch the code; the PDF shows Python, and this guide
+includes both languages. Predict before running; inspect a proposal
+before accepting it. No new dataset, paid AI account, package
+installation or GitHub setup is required.</p>
+<h2 id="start">Start</h2>
+<p>Extract <code>student-pack.zip</code> and open that folder in VS
+Code. Use your working Python or R installation from Week 4. The Python
+examples need only the standard library; the R examples use base R. If
+your own runtime is blocked, pair with a working machine and take the
+reviewer role, recording predictions and checking real output.</p>
+<ul>
+<li><code>control-flow.py</code> / <code>control-flow.R</code>: the
+supplied branch, finite-loop and FizzBuzz examples. Read and predict
+each section before running it. Running the whole file prints all four
+sections, including FizzBuzz; wait until your predictions are
+written.</li>
+<li><code>functions.py</code> / <code>functions.R</code>: supplied
+<code>f</code> and <code>my_div</code>. These files define functions
+without calling the intentionally failing examples. Save edits
+here.</li>
+</ul>
+<p>From the extracted folder, start an interactive Python session:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> <span class="at">-i</span> functions.py</span></code></pre></div>
+<p>Use your usual <code>python</code> or <code>py</code> launcher if
+appropriate. At the <code>&gt;&gt;&gt;</code> prompt, enter Python
+calls, not shell commands. After editing the file, use
+<code>exit()</code> and repeat this terminal command: the new
+definitions are now loaded. <code>math</code> and <code>warnings</code>
+are already imported by the starter. A bare call displays its returned
+value at the interactive prompt; <code>print(...)</code> also works.</p>
+<p>For R, start a fresh R session in the extracted folder and run:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;functions.R&quot;</span>)</span></code></pre></div>
+<p>After an edit, source the file again. For the final fresh-session
+check, restart R and source it. Run calls expected to error
+<strong>individually</strong>, then continue with the next call at the
+prompt; an error in a sourced script can stop later checks.</p>
+<h2 id="trace-control-flow">Trace control flow</h2>
+<p>The historical examples below are supplied, not blank-page
+programming tasks. First predict the value of <code>x</code> at each
+test, then run.</p>
+<p><code>%</code> is Python’s remainder operator:
+<code>7 % 2 == 1</code>, <code>8 % 2 == 0</code>. R uses
+<code>%%</code>. A zero remainder means divisible.</p>
+<p><strong>Python · live route</strong></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="op">-</span><span class="dv">4</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> x <span class="op">&lt;</span> <span class="dv">0</span>:</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="op">-</span>x</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> x <span class="op">%</span> <span class="dv">2</span> <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f&quot;</span><span class="sc">{</span>x<span class="sc">}</span><span class="ss"> is even&quot;</span>)</span></code></pre></div>
+<p><strong>R alternative</strong></p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">4</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (x <span class="sc">&lt;</span> <span class="dv">0</span>) {</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> <span class="sc">-</span>x</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (x <span class="sc">%%</span> <span class="dv">2</span> <span class="sc">==</span> <span class="dv">0</span>) {</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(x, <span class="st">&quot;is even</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Next, predict which single branch runs for <code>x = 0</code>, then
+change only the input to <code>3</code>.</p>
+<p><strong>Python · live route</strong></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> x <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">&quot;zero&quot;</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="cf">elif</span> x <span class="op">%</span> <span class="dv">2</span> <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">&quot;even&quot;</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">&quot;odd&quot;</span>)</span></code></pre></div>
+<p><strong>R alternative</strong></p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (x <span class="sc">==</span> <span class="dv">0</span>) {</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">&quot;zero</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> <span class="cf">if</span> (x <span class="sc">%%</span> <span class="dv">2</span> <span class="sc">==</span> <span class="dv">0</span>) {</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">&quot;even</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">&quot;odd</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>A branch uses one non-missing Boolean/logical answer. Last week’s
+tennis mask gave one answer per player; that sequence is a different
+object. R vector <code>if</code> and vector <code>||</code> error in the
+current teaching runtime. A multi-value NumPy condition is also
+ambiguous. Ordinary Python lists are different again: even
+<code>[False]</code> is nonempty and truthy. Do not use these objects as
+substitutes for an explicit scalar condition.</p>
+<p><code>any(mask)</code> asks whether at least one element is true;
+<code>all(mask)</code> asks whether every one is true. Those are
+deliberate new questions, not automatic repairs for a mask that was used
+in the wrong place. We do not need to rerun the tennis analysis.</p>
+<p>For the finite loop, trace current value → body → next value →
+stopping point.</p>
+<p><strong>Python · live route</strong></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> number <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>,<span class="dv">7</span>):</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(number)</span></code></pre></div>
+<p><strong>R alternative</strong></p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (number <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>) {</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(number)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<details>
+<summary>
+Checks — after your predictions
+</summary>
+<p>The negative-input example changes −4 to 4 and prints “4 is even”.
+The branch chain prints “zero” for 0 and “odd” for 3. The loop prints 1
+through 6 in order. Python excludes the stop value 7; R’s
+<code>1:6</code> includes 6.</p>
+</details>
+<h2 id="fizzbuzz">FizzBuzz</h2>
+<p><strong>7 minutes including debrief.</strong> Use the supplied code
+below (also in the control-flow file). You do not need to write it from
+scratch.</p>
+<ol type="1">
+<li>Predict the output at inputs <strong>3, 5 and 15</strong>. Mark the
+first true condition.</li>
+<li>Explain why the combined case precedes the separate cases.</li>
+<li>Change only the loop bound so it includes <strong>21</strong>.
+Predict, run and check the last output.</li>
+<li>Explain the change to a partner. Use one language.</li>
+</ol>
+<p><strong>Python · live route</strong></p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">21</span>):</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> i <span class="op">%</span> <span class="dv">15</span> <span class="op">==</span> <span class="dv">0</span>: <span class="bu">print</span>(<span class="st">&quot;FizzBuzz&quot;</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> i <span class="op">%</span> <span class="dv">3</span> <span class="op">==</span> <span class="dv">0</span>: <span class="bu">print</span>(<span class="st">&quot;Fizz&quot;</span>)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> i <span class="op">%</span> <span class="dv">5</span> <span class="op">==</span> <span class="dv">0</span>: <span class="bu">print</span>(<span class="st">&quot;Buzz&quot;</span>)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>: <span class="bu">print</span>(i)</span></code></pre></div>
+<p><strong>R alternative</strong></p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>) {</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (i <span class="sc">%%</span> <span class="dv">15</span> <span class="sc">==</span> <span class="dv">0</span>) <span class="fu">cat</span>(<span class="st">&quot;FizzBuzz</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span> <span class="cf">if</span> (i <span class="sc">%%</span> <span class="dv">3</span> <span class="sc">==</span> <span class="dv">0</span>) <span class="fu">cat</span>(<span class="st">&quot;Fizz</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span> <span class="cf">if</span> (i <span class="sc">%%</span> <span class="dv">5</span> <span class="sc">==</span> <span class="dv">0</span>) <span class="fu">cat</span>(<span class="st">&quot;Buzz</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span> <span class="fu">cat</span>(i, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<details>
+<summary>
+FizzBuzz checks — after the attempt
+</summary>
+<p>3 → Fizz; 5 → Buzz; 15 → FizzBuzz. Testing the multiple-of-3
+condition first would incorrectly label 15 as Fizz. For the bound edit,
+Python uses <code>range(1, 22)</code> and R uses <code>1:21</code>. The
+final output is Fizz at 21; the original final output at 20 was
+Buzz.</p>
+</details>
+<h2 id="read-the-supplied-function">Read the supplied function</h2>
+<p>Defining a function stores its body; calling it supplies inputs and
+executes it. Identify the arguments, operation and returned result.</p>
+<p><strong>Python · live route</strong></p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> my_div(numerator, denominator):</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    div <span class="op">=</span> numerator <span class="op">/</span> denominator</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> div</span></code></pre></div>
+<p><strong>R alternative</strong></p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>my_div <span class="ot">&lt;-</span> <span class="cf">function</span>(numerator, denominator) {</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  div <span class="ot">&lt;-</span> numerator <span class="sc">/</span> denominator</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(div)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p><strong>Python · live route</strong></p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>my_div(<span class="dv">1</span>, <span class="dv">2</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>my_div(numerator<span class="op">=</span><span class="dv">1</span>, denominator<span class="op">=</span><span class="dv">2</span>)</span></code></pre></div>
+<p><strong>R alternative</strong></p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">my_div</span>(<span class="dv">1</span>, <span class="dv">2</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">my_div</span>(<span class="at">numerator =</span> <span class="dv">1</span>, <span class="at">denominator =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p>Both calls return 0.5. Named arguments identify the same inputs as
+the positional call. Now predict whether the outer <code>div</code>
+changes:</p>
+<p><strong>Python · live route</strong></p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>div <span class="op">=</span> <span class="dv">99</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> my_div(<span class="dv">4</span>, <span class="dv">2</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(div)</span></code></pre></div>
+<p><strong>R alternative</strong></p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>div <span class="ot">&lt;-</span> <span class="dv">99</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">my_div</span>(<span class="dv">4</span>, <span class="dv">2</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>result</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>div</span></code></pre></div>
+<details>
+<summary>
+Local-name check
+</summary>
+<p>The returned result is 2; the outer <code>div</code> is still 99. The
+assignment inside <code>my_div</code> is local to that function call.
+Printing a result is different from returning it to the caller.</p>
+</details>
+<h2 id="small-change">Small change</h2>
+<p><strong>6 minutes.</strong> In <code>functions.py</code> /
+<code>functions.R</code>, use the supplied <code>f</code>. Its intended
+behavior is “input plus one”. The R version already returns its last
+expression; this is not an R bug.</p>
+<ol type="1">
+<li>Predict the supplied result before running.</li>
+<li>Python: add the missing return. R: explain the implicit return, then
+make it explicit.</li>
+<li>Reload your edited definition. Check <strong>2 → 3</strong> and
+<strong>0 → 1</strong>.</li>
+<li>Change only the increment from one to two. Reload; check <strong>2 →
+4</strong>.</li>
+</ol>
+<p><strong>Python · live route</strong></p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> f(x):</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    x <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(f(<span class="dv">2</span>))</span></code></pre></div>
+<p><strong>R alternative</strong></p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="cf">function</span>(x) { x <span class="sc">+</span> <span class="dv">1</span> }</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">f</span>(<span class="dv">2</span>)</span></code></pre></div>
+<details>
+<summary>
+Worked changes — after your attempt
+</summary>
+<p>The original Python function returns <code>None</code>; computing
+<code>x + 1</code> does not return it. R returns 3 for input 2.</p>
+<p><strong>Python · live route</strong></p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> f(x):</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> x <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(f(<span class="dv">2</span>))</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(f(<span class="dv">0</span>))</span></code></pre></div>
+<p><strong>R alternative</strong></p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="cf">function</span>(x) { <span class="fu">return</span>(x <span class="sc">+</span> <span class="dv">1</span>) }</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">f</span>(<span class="dv">2</span>)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="fu">f</span>(<span class="dv">0</span>)</span></code></pre></div>
+<p>Then change the increment:</p>
+<p><strong>Python · live route</strong></p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> f(x):</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> x <span class="op">+</span> <span class="dv">2</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(f(<span class="dv">2</span>))</span></code></pre></div>
+<p><strong>R alternative</strong></p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="cf">function</span>(x) { <span class="fu">return</span>(x <span class="sc">+</span> <span class="dv">2</span>) }</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">f</span>(<span class="dv">2</span>)</span></code></pre></div>
+</details>
+<h2 id="assumptions-errors-and-warnings">Assumptions, errors and
+warnings</h2>
+<p>The required division exercise takes <strong>ordinary finite real
+scalar inputs</strong>: one number per argument. Negative values and a
+zero numerator are valid. We also explicitly test text as invalid input.
+Arrays, vector recycling/broadcasting, complex/Boolean inputs and
+pre-existing missing/non-finite values are outside this exercise. This
+is not a general numeric-validation library.</p>
+<p>An error stops the current operation. A warning ordinarily permits
+execution to continue, but does not establish that the returned result
+is safe. Try the supplied warning example in a fresh session:</p>
+<p><strong>Python · live route</strong></p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>warnings.warn(<span class="st">&quot;Check the inputs&quot;</span>)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Execution continues&quot;</span>)</span></code></pre></div>
+<p><strong>R alternative</strong></p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">warning</span>(<span class="st">&quot;Check the inputs&quot;</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;Execution continues&quot;</span>)</span></code></pre></div>
+<p>The original <code>my_div(2, 0)</code> raises
+<code>ZeroDivisionError</code> in Python and returns <code>Inf</code> in
+R. Neither is a language bug. Later we introduce a <strong>new desired
+contract</strong>: missing result plus useful warning when the
+denominator is zero. Returning missing is a chosen policy, not an
+automatic cure for every problem.</p>
+<h3 id="a-data-analysis-reason-for-the-policy">A data-analysis reason
+for the policy</h3>
+<p>Average revenue per order is <code>revenue / number_of_orders</code>.
+Store A has revenue 1000 and 50 orders: average 20. Store B has revenue
+0 and 0 orders: no per-order average is defined. Zero would suggest an
+observed average; infinity would also mislead. For this exercise we
+choose a warning plus a missing numeric result. Original
+<code>my_div(0, 0)</code> raises a Python error or returns R
+<code>NaN</code>; original <code>(2, 0)</code> returns R
+<code>Inf</code>. These are language rules, not bugs.</p>
+<p>Python <code>math.nan</code> is a floating-point NaN;
+<code>None</code> is not a numeric NaN. R <code>NA</code> marks a
+missing/unknown value; <code>NA_real_</code> is its numeric (double)
+form. R <code>NaN</code> marks an undefined numerical result.
+<code>is.na</code> detects both, so our check also excludes
+<code>NaN</code>. Detecting missing is separate from choosing this
+policy.</p>
+<h2 id="debugging-workflow">Debugging workflow</h2>
+<p><strong>Reproduce → locate → hypothesize → change one thing → rerun →
+verify.</strong></p>
+<p>Apply it to <code>f(2)</code> and <code>my_div(&quot;a&quot;, 2)</code>, which
+you already know:</p>
+<ul>
+<li>Record intended behavior, the exact input and actual
+output/error.</li>
+<li>Identify the error type/message (if any), the relevant operation in
+your own code and the actual arguments. Here text reaches the division
+operation.</li>
+<li>Form a hypothesis before editing. <code>None</code> after
+<code>f(2)</code> suggests that computation did not become a returned
+value; it is not an exception.</li>
+<li>Inspect the small edit, rerun the original case and check other
+valid inputs.</li>
+</ul>
+<p>No debugger software is needed. Preserve a small reproducible example
+rather than relying on objects or old function definitions left over in
+your session.</p>
+<h2 id="manual-division">Manual division</h2>
+<p><strong>10 minutes including debrief; no AI yet.</strong> Work on
+your supplied <code>my_div</code>.</p>
+<ol type="1">
+<li>Run <code>my_div(&quot;a&quot;, 2)</code> and identify the error message,
+operation and actual inputs.</li>
+<li>Insert the supplied guard below <strong>inside the function, before
+division</strong>. Read it as “is either argument text?”. Python
+indentation is part of the block; R uses braces. Do not silently convert
+text to missing.</li>
+<li>Reload your edited function. Check <code>(4,2) → 2</code>,
+<code>(0,2) → 0</code>, <code>(-4,2) → -2</code>. Each should complete
+without a warning. Check text in each position separately:
+<code>my_div(&quot;a&quot;, 2)</code> and <code>my_div(2, &quot;a&quot;)</code> must raise
+useful errors.</li>
+<li>Predict and observe <code>(2,0)</code> separately. <strong>Do not
+add zero handling yet.</strong></li>
+</ol>
+<p>These guards reject text; they are not checks of every excluded input
+domain.</p>
+<p><strong>Python · live route</strong></p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="bu">isinstance</span>(numerator, <span class="bu">str</span>) <span class="kw">or</span> <span class="bu">isinstance</span>(denominator, <span class="bu">str</span>):</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">raise</span> <span class="pp">TypeError</span>(<span class="st">&quot;numerator and denominator must be numbers, not text&quot;</span>)</span></code></pre></div>
+<p><strong>R alternative</strong></p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">is.character</span>(numerator) <span class="sc">||</span> <span class="fu">is.character</span>(denominator)) {</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stop</span>(<span class="st">&quot;numerator and denominator must be numbers, not text&quot;</span>)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<details>
+<summary>
+Guarded my_div — compare after the attempt; use this if you are stuck
+</summary>
+<p><strong>Python · live route</strong></p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> my_div(numerator, denominator):</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">isinstance</span>(numerator, <span class="bu">str</span>) <span class="kw">or</span> <span class="bu">isinstance</span>(denominator, <span class="bu">str</span>):</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">TypeError</span>(<span class="st">&quot;numerator and denominator must be numbers, not text&quot;</span>)</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> numerator <span class="op">/</span> denominator</span></code></pre></div>
+<p><strong>R alternative</strong></p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>my_div <span class="ot">&lt;-</span> <span class="cf">function</span>(numerator, denominator) {</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.character</span>(numerator) <span class="sc">||</span> <span class="fu">is.character</span>(denominator)) {</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">&quot;numerator and denominator must be numbers, not text&quot;</span>)</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(numerator <span class="sc">/</span> denominator)</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>The normal results remain 2, 0 and −2. Text is rejected before
+division. Zero denominator still gives the original Python error / R
+infinity.</p>
+</details>
+<h2 id="ai-continuation">AI continuation</h2>
+<p><strong>19 minutes total.</strong> Modify the same guarded
+<code>my_div(numerator, denominator)</code> in place to satisfy the new
+zero-denominator requirement. Keep its name and arguments. Use no
+third-party libraries. Python standard-library modules are permitted; R
+base functions are sufficient. No paid account is required.</p>
+<h3 id="contract-and-independent-cases-set-before-asking-ai">Contract
+and independent cases — set before asking AI</h3>
+<p>For the stated scalar domain: nonzero denominator returns the
+quotient; zero denominator returns missing <strong>and</strong> emits a
+useful warning; text still errors. Negative inputs and a zero numerator
+remain valid.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Inputs</th>
+<th>Expected result</th>
+<th>Expected signal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>(4, 2)</code></td>
+<td>2</td>
+<td>No warning</td>
+</tr>
+<tr>
+<td><code>(2, 0)</code></td>
+<td>Python <code>math.nan</code> / R <code>NA_real_</code></td>
+<td>Useful zero-denominator warning</td>
+</tr>
+<tr>
+<td><code>(0, 2)</code></td>
+<td>0</td>
+<td>No warning</td>
+</tr>
+<tr>
+<td><code>(-4, 2)</code></td>
+<td>−2</td>
+<td>No warning</td>
+</tr>
+<tr>
+<td><code>(&quot;a&quot;, 2)</code></td>
+<td>No result</td>
+<td>Useful input error</td>
+</tr>
+<tr>
+<td><code>(2, &quot;a&quot;)</code></td>
+<td>No result</td>
+<td>Useful input error</td>
+</tr>
+</tbody>
+</table>
+<h3 id="minutes-03-predict-and-reproduce-before-ai">Minutes 0–3: predict
+and reproduce before AI</h3>
+<p>Write what the new contract requires at <code>(4,2)</code> and
+<code>(2,0)</code>. Run the current <code>my_div(2,0)</code> and record
+the result/error. Locate the division operation. Explain why the current
+code does not implement the newly requested policy.</p>
+<h3 id="minutes-35-ask-for-a-small-proposal">Minutes 3–5: ask for a
+small proposal</h3>
+<p>Paste your current code, prediction and actual failing call with this
+prompt:</p>
+<blockquote>
+<p>This supplied function currently divides two ordinary scalar numbers.
+We now require a missing result and a useful warning when the
+denominator is zero; text inputs must still raise an error. Here are my
+prediction, current code and the observed failing call. Explain the
+relevant execution path and propose the smallest change to the existing
+<code>my_div(numerator, denominator)</code>. Keep its name and argument
+names. Return Python <code>math.nan</code> / R <code>NA_real_</code>.
+Preserve ordinary division, including zero numerators and negative
+values. Use no third-party libraries: Python standard-library modules
+are permitted; R base functions are sufficient. Do not add vector
+support or a broad catch-all exception. Explain each changed line. I
+will run my own checks.</p>
+</blockquote>
+<p><strong>No AI access:</strong> propose the edit with a partner, then
+compare with the worked scalar solution below. Inspect and test it using
+the same steps. Do not spend activity time troubleshooting a login.</p>
+<h3 id="minutes-58-inspect-before-running">Minutes 5–8: inspect before
+running</h3>
+<p>Compare old and proposed code. Point to all five components: zero
+check, warning, returned missing value, normal division path and
+text-input rejection. Reject unrelated rewrites, a hard-coded answer,
+returning zero for missing, or hiding every error. A small diff tells
+you what changed; it does not prove the change is correct.</p>
+<h3 id="minutes-816-verify-independently">Minutes 8–16: verify
+independently</h3>
+<p>Save the reviewed function in your functions file and reload the
+definition. Python’s <code>math</code> and <code>warnings</code> imports
+are supplied; R needs no package. Run the six cases, recording both
+returned value and warning/error. The commands below are supplied
+independently of the AI. Enter expected-error calls individually.</p>
+<p><strong>Python · live route</strong></p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(my_div(<span class="dv">4</span>, <span class="dv">2</span>))</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(math.isnan(my_div(<span class="dv">2</span>, <span class="dv">0</span>)))</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(my_div(<span class="dv">0</span>, <span class="dv">2</span>))</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(my_div(<span class="op">-</span><span class="dv">4</span>, <span class="dv">2</span>))</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>my_div(<span class="st">&quot;a&quot;</span>, <span class="dv">2</span>)  <span class="co"># expected input error</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>my_div(<span class="dv">2</span>, <span class="st">&quot;a&quot;</span>)  <span class="co"># run separately; expected input error</span></span></code></pre></div>
+<p><strong>R alternative</strong></p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">my_div</span>(<span class="dv">4</span>, <span class="dv">2</span>)</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">my_div</span>(<span class="dv">2</span>, <span class="dv">0</span>)</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="fu">is.na</span>(result) <span class="sc">&amp;&amp;</span> <span class="sc">!</span><span class="fu">is.nan</span>(result)</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="fu">my_div</span>(<span class="dv">0</span>, <span class="dv">2</span>)</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="fu">my_div</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">2</span>)</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a><span class="fu">my_div</span>(<span class="st">&quot;a&quot;</span>, <span class="dv">2</span>)  <span class="co"># expected input error</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="fu">my_div</span>(<span class="dv">2</span>, <span class="st">&quot;a&quot;</span>)  <span class="co"># run separately; expected input error</span></span></code></pre></div>
+<p><code>math.isnan(...)</code> should be true in Python. In R,
+<code>is.na(result) &amp;&amp; !is.nan(result)</code> distinguishes the
+chosen missing result from NaN. These expressions check the
+<strong>returned value only</strong>, not whether a warning occurred. Do
+not compare missing values with equality. The zero-numerator case
+catches a check of the wrong argument; the negative case checks valid
+signed arithmetic; the text case catches overbroad error
+suppression.</p>
+<p>For the final check, restart the interpreter and load your edited
+file again. Python may suppress repeated warnings from the same
+location; confirm the warning on the first zero-denominator call in that
+fresh session. Do not add logging or warning-filter machinery to the
+student function.</p>
+<p>Before accepting, <strong>invent one additional input</strong> that
+could reveal a mistake. Write its expected value and signal before
+running it. Explain what the observed result tells you. Do not ask AI to
+provide your only additional check.</p>
+<details>
+<summary>
+Optional: check the warning separately from the value
+</summary>
+<p>A missing result does not prove a warning occurred. First observe the
+message in a fresh session. If uncertain, these supplied checks capture
+the signal separately; do not put this checking machinery inside your
+function.</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> math</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> warnings.catch_warnings(record<span class="op">=</span><span class="va">True</span>) <span class="im">as</span> signals:</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>    warnings.simplefilter(<span class="st">&quot;always&quot;</span>)</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>    result <span class="op">=</span> my_div(<span class="dv">2</span>, <span class="dv">0</span>)</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(math.isnan(result))  <span class="co"># value check</span></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">len</span>(signals))        <span class="co"># signal check: expect 1</span></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">str</span>(signals[<span class="dv">0</span>].message) <span class="cf">if</span> signals <span class="cf">else</span> <span class="st">&quot;NO WARNING&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>warned <span class="ot">&lt;-</span> <span class="cn">FALSE</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">withCallingHandlers</span>(<span class="fu">my_div</span>(<span class="dv">2</span>, <span class="dv">0</span>), <span class="at">warning =</span> <span class="cf">function</span>(w) {</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  warned <span class="ot">&lt;&lt;-</span> <span class="cn">TRUE</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">message</span>(<span class="fu">conditionMessage</span>(w))</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">invokeRestart</span>(<span class="st">&quot;muffleWarning&quot;</span>)</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a><span class="fu">is.na</span>(result) <span class="sc">&amp;&amp;</span> <span class="sc">!</span><span class="fu">is.nan</span>(result)  <span class="co"># value check</span></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>warned                           <span class="co"># signal check: expect TRUE</span></span></code></pre></div>
+</details>
+<h3 id="minutes-1619-decide">Minutes 16–19: decide</h3>
+<p>Say “I accept / reject this proposal because…” and cite observed
+evidence. A successful repair meets the new zero policy while preserving
+normal division and text rejection. You must also be able to explain
+which branch ran. These cases do not establish universal robustness or
+justify silently replacing other errors with missing results.</p>
+<p><strong>AI-generated code is a proposal; the analyst must understand
+the change and provide evidence that it satisfies the intended
+behavior.</strong></p>
+<h2 id="worked-safe-division">Worked safe division</h2>
+<p>Open only after your attempt, or for the no-AI fallback after
+proposing your own small edit. This reuses the historical warning and
+missing-result policy with an explicit scalar branch. It deliberately
+does not implement broader domains.</p>
+<details>
+<summary>
+Show the scalar solution
+</summary>
+<p>Python uses the <code>math</code> and <code>warnings</code> imports
+already at the top of the starter. The text guard runs before the zero
+check. Returning from that zero branch prevents ordinary division from
+running.</p>
+<p><strong>Python · live route</strong></p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> math</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> my_div(numerator, denominator):</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">isinstance</span>(numerator, <span class="bu">str</span>) <span class="kw">or</span> <span class="bu">isinstance</span>(denominator, <span class="bu">str</span>):</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">TypeError</span>(<span class="st">&quot;numerator and denominator must be numbers, not text&quot;</span>)</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> denominator <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>        warnings.warn(<span class="st">&quot;denominator is 0; returning NaN&quot;</span>)</span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> math.nan</span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> numerator <span class="op">/</span> denominator</span></code></pre></div>
+<p><strong>R alternative</strong></p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>my_div <span class="ot">&lt;-</span> <span class="cf">function</span>(numerator, denominator) {</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.character</span>(numerator) <span class="sc">||</span> <span class="fu">is.character</span>(denominator)) {</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">&quot;numerator and denominator must be numbers, not text&quot;</span>)</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (denominator <span class="sc">==</span> <span class="dv">0</span>) {</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">warning</span>(<span class="st">&quot;denominator is 0; returning NA&quot;</span>)</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(<span class="cn">NA_real_</span>)</span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(numerator <span class="sc">/</span> denominator)</span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</details>
+<h2 id="article-discussion-beyond-passing-tests">Article discussion ·
+Beyond passing tests</h2>
+<p><strong>6 minutes:</strong> 1 minute reflection or neighbor
+discussion, 4 minutes whole-class, 1 minute conclusion. Connect your
+decision about <code>my_div()</code> to these questions:</p>
+<ol type="1">
+<li>Why could passing tests still leave code unsuitable for use?</li>
+<li>Our function passes all supplied checks: should we accept it? What
+else matters?</li>
+<li>Is this specific to AI-generated code?</li>
+</ol>
+<p>Preparatory reading: David Rein (METR), <strong>13 August
+2025</strong>, <a href="https://metr.org/blog/2025-08-12-research-update-towards-reconciling-slowdown-with-time-horizons/">Research
+Update: Algorithmic vs. Holistic Evaluation</a>. The <strong>TL;DR,
+Results and Caveats</strong> sections are sufficient; no full-article
+reading is required. The study concerns an early-2025 agent and two
+mature repositories, not all AI-generated software. Instructor
+discussion notes are in the slide source.</p>
+<h2 id="exit-check">Exit check</h2>
+<p>Explain one executed branch, one useful error and one independent
+check that supports your decision. Keep your prediction, reviewed edit
+and observed checks.</p>
+<p>22 October: Responsible AI at UNIL, asynchronous. 29 October: SQL
+&amp; relational data.</p>
+</body>
+</html>
