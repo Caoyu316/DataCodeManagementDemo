@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>DCM · SQL and relational data</title>
+  <style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+  <style type="text/css">body { max-width: 850px; margin: 50px auto; padding: 0 28px; font: 18px/1.6 'Liberation Sans', Arial, sans-serif; color: #17262b; }
+h1 { font-size: 38px; line-height: 1.15; color: #23373b; border-top: 5px solid #6a5acd; padding-top: 25px; }
+h2 { margin-top: 45px; color: #373895; } h3 { color: #465a65; }
+a { color: #a53d7c; } pre { background: #f5f7fa; padding: 18px 22px; border-radius: 10px; overflow-x: auto; }
+code { font-family: 'Liberation Mono', monospace; font-size: .88em; } blockquote { border-left: 5px solid #a53d7c; margin-left: 0; padding: 10px 20px; background: #f9f0f6; }
+table { border-collapse: collapse; width: 100%; } td,th { text-align: left; padding: 10px; border-bottom: 1px solid #dce0ed; }
+@media print { body { margin: 0; font-size: 11pt; } pre { white-space: pre-wrap; } h2,h3 { break-after: avoid; } }
+</style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">DCM · SQL and relational data</h1>
+<p class="date">Thursday, 29 October 2026</p>
+</header>
+<p>Two 45-minute periods · Python live · R alternative · one language
+per student.</p>
+<p><strong>The question:</strong> can we produce a correct order count
+and total for <strong>every customer</strong>, including a customer with
+no orders?</p>
+<h2 id="start">Start here</h2>
+<p>Extract the student pack into a folder and open that folder in your
+editor. The pack contains <code>sql.py</code>, <code>sql.R</code>,
+<code>queries.sql</code>, this guide and its HTML version. The Python/R
+files supply the complete synthetic database; you do not need a database
+server, cloud account or internet connection during the exercises.</p>
+<p>Before class, check <strong>one</strong> route:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> <span class="at">-c</span> <span class="st">&quot;import sqlite3, pandas; print(sqlite3.sqlite_version)&quot;</span></span></code></pre></div>
+<p>Or in R:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DBI)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RSQLite)</span></code></pre></div>
+<p>Python needs pandas from Week 4; sqlite3 and datetime are
+standard-library modules. R needs DBI and RSQLite. If an import is
+unavailable, resolve it before class or pair with a working runtime; do
+not spend the activity installing packages. The reviewer can predict,
+inspect the actual output and record checks.</p>
+<h3 id="python-workflow">Python workflow</h3>
+<p>From the extracted folder, start:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> <span class="at">-i</span> sql.py</span></code></pre></div>
+<p>Use <code>python</code> or <code>py</code> if that is your usual
+launcher. You should see <code>n_customers = 6</code>. At the
+<code>&gt;&gt;&gt;</code> prompt, put <strong>one SQL query inside a
+Python string</strong>, then print its result:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>q <span class="op">=</span> <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="st">SELECT name, country FROM customers</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="st">WHERE country = &#39;CH&#39;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="st">ORDER BY name ASC LIMIT 3;</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(pd.read_sql_query(q, con).to_string(index<span class="op">=</span><span class="va">False</span>))</span></code></pre></div>
+<p>Alternatively, edit the <code>q</code> string near the bottom of
+<code>sql.py</code>, save, exit Python and run the starter again. Your
+SQL edits can also be saved in <code>queries.sql</code>. That file is a
+record of your work: select and copy one statement into <code>q</code>;
+do not run it as a Python script or send all its statements to
+<code>read_sql_query</code> at once.</p>
+<h3 id="r-workflow">R workflow</h3>
+<p>Start <code>R --vanilla</code> in the extracted folder, then:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;sql.R&quot;</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>q <span class="ot">&lt;-</span> <span class="st">&quot;SELECT name, country FROM customers</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="st">      WHERE country = &#39;CH&#39;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="st">      ORDER BY name ASC LIMIT 3;&quot;</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(DBI<span class="sc">::</span><span class="fu">dbGetQuery</span>(con, q))</span></code></pre></div>
+<p>The SQL is identical. Only the host-language string and query call
+differ. Do not implement both routes.</p>
+<h3 id="restart-and-finish">Restart and finish</h3>
+<p>The database lives in memory. A <strong>fresh run</strong> recreates
+it, including Farah. After editing a Python/R file, exit and restart to
+avoid stale definitions or reusing an old connection. Do not rerun
+CREATE/INSERT snippets manually against an already populated database.
+When finished, use <code>con.close()</code> in Python or
+<code>DBI::dbDisconnect(con)</code> in R; save your SQL and evidence
+first.</p>
+<h2 id="data">The complete synthetic data</h2>
+<p>These are teaching records from historical DCM Lecture 3, with one
+added customer, Farah, who has no orders. The dates deliberately remain
+in September 2025. Amounts share one common synthetic monetary unit;
+country does not indicate currency. One order row is a whole order, not
+an order line.</p>
+<h3 id="customers-one-row-per-customer">customers — one row per
+customer</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">customer_id</th>
+<th>name</th>
+<th>country</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">1</td>
+<td>Ada</td>
+<td>CH</td>
+</tr>
+<tr>
+<td style="text-align: right;">2</td>
+<td>Bruno</td>
+<td>FR</td>
+</tr>
+<tr>
+<td style="text-align: right;">3</td>
+<td>Chloé</td>
+<td>CH</td>
+</tr>
+<tr>
+<td style="text-align: right;">4</td>
+<td>Dinesh</td>
+<td>IN</td>
+</tr>
+<tr>
+<td style="text-align: right;">5</td>
+<td>Elena</td>
+<td>US</td>
+</tr>
+<tr>
+<td style="text-align: right;">6</td>
+<td>Farah</td>
+<td>CH</td>
+</tr>
+</tbody>
+</table>
+<h3 id="orders-one-row-per-order">orders — one row per order</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">order_id</th>
+<th style="text-align: right;">customer_id</th>
+<th>order_date</th>
+<th style="text-align: right;">amount</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td>2025-09-20</td>
+<td style="text-align: right;">120</td>
+</tr>
+<tr>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+<td>2025-09-21</td>
+<td style="text-align: right;">75</td>
+</tr>
+<tr>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">2</td>
+<td>2025-09-20</td>
+<td style="text-align: right;">300</td>
+</tr>
+<tr>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">3</td>
+<td>2025-09-22</td>
+<td style="text-align: right;">42</td>
+</tr>
+<tr>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">3</td>
+<td>2025-09-25</td>
+<td style="text-align: right;">88</td>
+</tr>
+<tr>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">3</td>
+<td>2025-09-26</td>
+<td style="text-align: right;">150</td>
+</tr>
+<tr>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">4</td>
+<td>2025-09-21</td>
+<td style="text-align: right;">60</td>
+</tr>
+<tr>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">4</td>
+<td>2025-09-27</td>
+<td style="text-align: right;">500</td>
+</tr>
+<tr>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">5</td>
+<td>2025-09-23</td>
+<td style="text-align: right;">20</td>
+</tr>
+<tr>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">5</td>
+<td>2025-09-29</td>
+<td style="text-align: right;">220</td>
+</tr>
+</tbody>
+</table>
+<p>Schema to inspect or share with an assistant for this exercise:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> customers (</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  customer_id <span class="dt">INTEGER</span> <span class="kw">PRIMARY</span> <span class="kw">KEY</span>,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  name TEXT <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  country TEXT <span class="kw">NOT</span> <span class="kw">NULL</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> orders (</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  order_id <span class="dt">INTEGER</span> <span class="kw">PRIMARY</span> <span class="kw">KEY</span>,</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  customer_id <span class="dt">INTEGER</span> <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  order_date TEXT <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  amount <span class="dt">REAL</span> <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="kw">FOREIGN</span> <span class="kw">KEY</span>(customer_id) <span class="kw">REFERENCES</span> customers(customer_id)</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div>
+<p>Setup already creates these tables and enables foreign keys. The
+schema is a reference, <strong>not another command to run</strong> in
+your populated database. Customer IDs can repeat in orders; order IDs
+cannot.</p>
+<h2 id="period-one">Period 1 — select and summarise</h2>
+<p><strong>Warm-up (A1).</strong> Predict the CH customers before
+running the query in the startup example. Check names, country and
+order. Expect Ada, Chloé and Farah.</p>
+<p><strong>Three large orders (A2, slide 7, 6 minutes).</strong> Spend
+two minutes predicting from the source rows, two completing the starter
+and two comparing results. Return the three largest orders whose amount
+is greater than 100. Show order ID/amount; use order ID to break amount
+ties.</p>
+<p><strong>Top three averages (A5, slide 11, 6 minutes).</strong> Spend
+one minute predicting, three completing/running and two comparing.
+Return customer ID and mean order amount, ordered by the
+<strong>unrounded</strong> mean descending, then ID ascending; limit to
+three. Round the displayed mean to two decimals. Who has the largest
+mean? Who has the largest total?</p>
+<p>Record for each: <strong>prediction → query → observed rows →
+checks</strong>. Replace every <code>...</code> placeholder before
+executing.</p>
+<details>
+<summary>
+Worked answers — open after your attempt
+</summary>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- A2</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> order_id, amount <span class="kw">FROM</span> orders</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> amount <span class="op">&gt;</span> <span class="dv">100</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> amount <span class="kw">DESC</span>, order_id <span class="kw">ASC</span> <span class="kw">LIMIT</span> <span class="dv">3</span>;</span></code></pre></div>
+<p>Expected <code>(order_id, amount)</code>: <strong>(8, 500), (3, 300),
+(10, 220)</strong>. Five orders qualify before LIMIT, but only the
+largest three are returned.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- A3: baseline summary</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="fu">COUNT</span>(<span class="op">*</span>) <span class="kw">AS</span> n_orders, <span class="fu">SUM</span>(amount) <span class="kw">AS</span> total,</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>       <span class="fu">AVG</span>(amount) <span class="kw">AS</span> avg_amount <span class="kw">FROM</span> orders;</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co">-- A4: customer groups</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> customer_id, <span class="fu">COUNT</span>(<span class="op">*</span>) <span class="kw">AS</span> n_orders, <span class="fu">SUM</span>(amount) <span class="kw">AS</span> total,</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>       <span class="fu">ROUND</span>(<span class="fu">AVG</span>(amount), <span class="dv">2</span>) <span class="kw">AS</span> avg_amount</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> orders <span class="kw">GROUP</span> <span class="kw">BY</span> customer_id <span class="kw">ORDER</span> <span class="kw">BY</span> customer_id;</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co">-- A5</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> customer_id, <span class="fu">ROUND</span>(<span class="fu">AVG</span>(amount), <span class="dv">2</span>) <span class="kw">AS</span> avg_amount</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> orders <span class="kw">GROUP</span> <span class="kw">BY</span> customer_id</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> <span class="fu">AVG</span>(amount) <span class="kw">DESC</span>, customer_id <span class="kw">ASC</span> <span class="kw">LIMIT</span> <span class="dv">3</span>;</span></code></pre></div>
+<p>A3 returns one row: <strong>10, 1575, 157.5</strong>. Check the ten
+source amounts by hand. A4 returns:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">customer_id</th>
+<th style="text-align: right;">n_orders</th>
+<th style="text-align: right;">total</th>
+<th style="text-align: right;">avg_amount</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">195</td>
+<td style="text-align: right;">97.50</td>
+</tr>
+<tr>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">300</td>
+<td style="text-align: right;">300.00</td>
+</tr>
+<tr>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">280</td>
+<td style="text-align: right;">93.33</td>
+</tr>
+<tr>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">560</td>
+<td style="text-align: right;">280.00</td>
+</tr>
+<tr>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">240</td>
+<td style="text-align: right;">120.00</td>
+</tr>
+</tbody>
+</table>
+<p>Farah has no input row in orders. A5 returns <strong>(2, 300), (4,
+280), (5, 120)</strong>. Bruno has the largest mean; Dinesh has the
+largest total, 560. Averaging customer means weights customers equally,
+whereas the overall order mean weights every order equally.</p>
+</details>
+<h2 id="joins">Period 2 — join and check missing matches</h2>
+<p>Predict counts before running these demonstration queries.
+<code>c</code> and <code>o</code> are table aliases; <code>ON</code>
+tells the engine which rows match.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- B1: matching order/customer pairs</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> o.order_id, o.order_date, o.amount, c.name</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> orders o <span class="kw">INNER</span> <span class="kw">JOIN</span> customers c</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">ON</span> o.customer_id <span class="op">=</span> c.customer_id</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> o.order_id;</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co">-- B2: every customer, with matching orders where present</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> c.customer_id, c.name, o.order_id, o.amount</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> customers c <span class="kw">LEFT</span> <span class="kw">JOIN</span> orders o</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="kw">ON</span> o.customer_id <span class="op">=</span> c.customer_id</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> c.customer_id, o.order_id;</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="co">-- B3: joined rows versus observed orders</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="fu">COUNT</span>(<span class="op">*</span>) <span class="kw">AS</span> joined_rows, <span class="fu">COUNT</span>(o.order_id) <span class="kw">AS</span> matched_orders,</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>       <span class="fu">SUM</span>(o.amount) <span class="kw">AS</span> total</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> customers c <span class="kw">LEFT</span> <span class="kw">JOIN</span> orders o</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>  <span class="kw">ON</span> o.customer_id <span class="op">=</span> c.customer_id;</span></code></pre></div>
+<p>B1 returns <strong>ten</strong> rows, one per order. B2 returns
+<strong>eleven</strong>: ten matches plus Farah with NULL order fields.
+LEFT JOIN retains all customers, but can produce several rows per
+customer. B3 returns <strong>(11, 10, 1575)</strong>. Count a non-null
+order key to count orders.</p>
+<p><strong>Who has no orders? (B4, slide 15, 6 minutes).</strong>
+Predict for one minute, complete/run the starter for three and explain
+the result for two. Test a right-side field that cannot be NULL in a
+stored order. Use <code>IS NULL</code>, not <code>= NULL</code>.</p>
+<details>
+<summary>
+Worked answer — customers without orders
+</summary>
+<div class="sourceCode" id="cb10"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> c.customer_id, c.name</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> customers c <span class="kw">LEFT</span> <span class="kw">JOIN</span> orders o</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">ON</span> o.customer_id <span class="op">=</span> c.customer_id</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> o.order_id <span class="kw">IS</span> <span class="kw">NULL</span> <span class="kw">ORDER</span> <span class="kw">BY</span> c.customer_id;</span></code></pre></div>
+<p>Only <strong>(6, Farah)</strong>. Her customer ID is not missing; her
+order ID is. For Farah’s joined group, <code>COUNT(o.order_id)</code> is
+0, while <code>SUM(o.amount)</code> and <code>AVG(o.amount)</code> are
+NULL. A zero-total reporting policy can use
+<code>COALESCE(SUM(o.amount), 0)</code>; it does not establish an
+observed average of zero.</p>
+<p>SQLite NULL appears as Python <code>None</code> in raw rows, R
+<code>NA</code>, or a missing-value display such as pandas
+<code>NaN</code>. These displays do not turn NULL into zero.</p>
+</details>
+<h2 id="ai">AI critique — specify, inspect, repair, verify</h2>
+<p><strong>18 minutes, slides 18–21.</strong> Work from the supplied
+deliberately flawed AI-authored teaching draft in
+<code>queries.sql</code>. This is a local teaching adaptation, not a
+quotation of the historical cloud-query transcript.</p>
+<p><strong>Contract:</strong> every customer exactly once; return
+customer ID, name, order count and total amount. Customers without
+orders must have count 0 and total 0. Keep the schema and data
+unchanged.</p>
+<ol type="1">
+<li><strong>3 minutes:</strong> write expected coverage/counts/totals
+and choose one customer for a manual source-row check.</li>
+<li><strong>3 minutes:</strong> inspect the supplied draft; predict who
+is excluded. Ask for a bounded repair if an assistant is available.</li>
+<li><strong>8 minutes:</strong> inspect each changed clause, run the
+repair and check it independently.</li>
+<li><strong>4 minutes:</strong> compare with the worked answer and
+justify acceptance/rejection.</li>
+</ol>
+<div class="sourceCode" id="cb11"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- C1: plausible but incorrect for the contract</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> c.customer_id, c.name, <span class="fu">COUNT</span>(<span class="op">*</span>) <span class="kw">AS</span> n_orders,</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>       <span class="fu">SUM</span>(o.amount) <span class="kw">AS</span> total</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> customers c <span class="kw">INNER</span> <span class="kw">JOIN</span> orders o</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">ON</span> c.customer_id <span class="op">=</span> o.customer_id</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> c.customer_id, c.name <span class="kw">ORDER</span> <span class="kw">BY</span> c.customer_id;</span></code></pre></div>
+<p>Suggested prompt:</p>
+<blockquote>
+<p>Using this SQLite schema and synthetic fixture, inspect this query
+against the stated contract. Explain who is excluded and how unmatched
+rows affect counts and sums. Propose the smallest SQL-only repair; do
+not alter the tables or data. Explain each change. I will check the
+output independently.</p>
+</blockquote>
+<p>Supply the schema, contract and draft, using only these synthetic
+records. <strong>No assistant?</strong> Work in pairs on the same draft,
+then compare with the answer. No paid tool or installation is required.
+Record significant AI assistance and your own checks; a second AI’s
+agreement is not independent evidence.</p>
+<h3 id="evidence-to-retain">Evidence to retain</h3>
+<ul>
+<li>Six rows; IDs 1–6, each once; correct names.</li>
+<li>Farah has zero orders and zero total.</li>
+<li>Returned counts sum to 10; returned totals sum to 1,575.</li>
+<li>One independently chosen source-row check: count the orders and add
+the amounts by hand.</li>
+<li>Explain changed clauses and write “I accept / reject this proposal
+because …”.</li>
+</ul>
+<p>For example, after running a repaired query in Python:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> pd.read_sql_query(q, con)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result.to_string(index<span class="op">=</span><span class="va">False</span>))</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result[<span class="st">&quot;n_orders&quot;</span>].<span class="bu">sum</span>(), result[<span class="st">&quot;total&quot;</span>].<span class="bu">sum</span>())</span></code></pre></div>
+<p>In R:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> DBI<span class="sc">::</span><span class="fu">dbGetQuery</span>(con, q)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(result)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">c</span>(<span class="fu">sum</span>(result<span class="sc">$</span>n_orders), <span class="fu">sum</span>(result<span class="sc">$</span>total)))</span></code></pre></div>
+<p>These checks of the returned table supplement your manual source
+check; they do not replace coverage or association checks.</p>
+<h3 id="ai-answer">Worked repair</h3>
+<details>
+<summary>
+Open after your attempt — diagnosis, query and complete result
+</summary>
+<p>INNER JOIN drops Farah. Its totals still sum to 1,575, which does not
+demonstrate complete customer coverage. Changing only INNER to LEFT
+gives Farah an incorrect order count of <strong>1</strong> and a
+<strong>NULL</strong> total: <code>COUNT(*)</code> counts the
+null-extended joined row.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- C2</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> c.customer_id, c.name, <span class="fu">COUNT</span>(o.order_id) <span class="kw">AS</span> n_orders,</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>       <span class="fu">COALESCE</span>(<span class="fu">SUM</span>(o.amount), <span class="dv">0</span>) <span class="kw">AS</span> total</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> customers c <span class="kw">LEFT</span> <span class="kw">JOIN</span> orders o</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">ON</span> c.customer_id <span class="op">=</span> o.customer_id</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> c.customer_id, c.name <span class="kw">ORDER</span> <span class="kw">BY</span> c.customer_id;</span></code></pre></div>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">customer_id</th>
+<th>name</th>
+<th style="text-align: right;">n_orders</th>
+<th style="text-align: right;">total</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">1</td>
+<td>Ada</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">195</td>
+</tr>
+<tr>
+<td style="text-align: right;">2</td>
+<td>Bruno</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">300</td>
+</tr>
+<tr>
+<td style="text-align: right;">3</td>
+<td>Chloé</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">280</td>
+</tr>
+<tr>
+<td style="text-align: right;">4</td>
+<td>Dinesh</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">560</td>
+</tr>
+<tr>
+<td style="text-align: right;">5</td>
+<td>Elena</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">240</td>
+</tr>
+<tr>
+<td style="text-align: right;">6</td>
+<td>Farah</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table>
+<p>LEFT JOIN retains every customer. COUNT(order_id) counts real orders.
+COALESCE applies the stated zero-total policy. Manual example: Chloé has
+orders 4/5/6; <code>42 + 88 + 150 = 280</code>, count 3. Check your own
+chosen customer too. Passing these checks supports this query for this
+contract; it does not prove correctness for arbitrary data models.</p>
+</details>
+<h2 id="appendix">Optional appendix — outside the 90-minute lecture</h2>
+<h3 id="a1.-having-filters-groups">A1. HAVING filters groups</h3>
+<p>Historical Lecture 3’s country-level example, retained for
+independent practice:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> c.country, <span class="fu">ROUND</span>(<span class="fu">AVG</span>(o.amount), <span class="dv">2</span>) <span class="kw">AS</span> avg_amount,</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">COUNT</span>(<span class="op">*</span>) <span class="kw">AS</span> n_orders</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> orders o <span class="kw">JOIN</span> customers c <span class="kw">ON</span> o.customer_id <span class="op">=</span> c.customer_id</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> c.country</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="kw">HAVING</span> <span class="fu">COUNT</span>(<span class="op">*</span>) <span class="op">&gt;=</span> <span class="dv">2</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> avg_amount <span class="kw">DESC</span>;</span></code></pre></div>
+<p>Expected <code>(country, avg_amount, n_orders)</code>: <strong>(IN,
+280, 2), (US, 120, 2), (CH, 95, 5)</strong>. WHERE filters input rows;
+HAVING filters groups. France’s single order does not meet the group
+condition. Farah adds no order to the CH mean.</p>
+<h3 id="a2.-a-filter-can-remove-a-retained-customer">A2. A filter can
+remove a retained customer</h3>
+<div class="sourceCode" id="cb16"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> c.customer_id, c.name, o.order_id</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> customers c <span class="kw">LEFT</span> <span class="kw">JOIN</span> orders o</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">ON</span> c.customer_id <span class="op">=</span> o.customer_id</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> o.amount <span class="op">&gt;</span> <span class="dv">0</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> c.customer_id, o.order_id;</span></code></pre></div>
+<p>This returns ten rows and drops Farah: her NULL amount does not
+satisfy <code>&gt; 0</code>. To retain every customer while matching
+only positive orders, put that condition in ON instead:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> c.customer_id, c.name, o.order_id</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> customers c <span class="kw">LEFT</span> <span class="kw">JOIN</span> orders o</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">ON</span> c.customer_id <span class="op">=</span> o.customer_id <span class="kw">AND</span> o.amount <span class="op">&gt;</span> <span class="dv">0</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> c.customer_id, o.order_id;</span></code></pre></div>
+<p>This returns eleven rows, including Farah. Predicate placement
+changes the question. Another diagnostic: a Cartesian join pairs every
+customer with every order — <strong>6 × 10 = 60</strong> rows and six
+copies of each amount, total <strong>9,450</strong>. A large result is
+not automatically more information.</p>
+<h3 id="a3.-bigquery-and-historical-ai-answers">A3. BigQuery and
+historical AI answers</h3>
+<p>BigQuery is an optional cloud route, not required for this local
+session. Historical Lecture 3 used OpenAQ, bikeshare and traffic data
+plus R/Python connectors. One ChatGPT bikeshare draft named
+<code>bigquery-public-data.san_francisco</code> where the teaching
+example expected
+<code>bigquery-public-data.san_francisco_bikeshare</code>. A
+plausible-looking query still needs the actual dataset/table/column
+names and the right SQL dialect.</p>
+<p>Cloud UI, dataset availability, credentials and costs have
+<strong>not</strong> been rechecked for this lesson. Do not copy old
+screenshots or cached results as evidence of current output. COUNT of
+accident rows is also not necessarily a count of fatalities. LIMIT
+controls output rows; it is not a general guarantee of lower scanning
+costs. See <a href="https://docs.cloud.google.com/bigquery/docs/best-practices-costs">Google’s
+cost guidance</a> if pursuing cloud work later.</p>
+<h2 id="finish">Troubleshooting and exit</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Check</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SyntaxError</code> at SELECT in Python</td>
+<td>Put SQL inside the quoted <code>q</code> string, then call the query
+function.</td>
+</tr>
+<tr>
+<td>SQL syntax error near <code>...</code></td>
+<td>Replace all starter placeholders; execute one statement at a
+time.</td>
+</tr>
+<tr>
+<td>No such table / name <code>con</code> not defined</td>
+<td>Run/source the supplied starter in this session; use its
+connection.</td>
+</tr>
+<tr>
+<td>Table exists / unique-key failure after setup</td>
+<td>Restart with a fresh in-memory database; do not seed twice.</td>
+</tr>
+<tr>
+<td>Old result after an edit</td>
+<td>Save the file, restart/reload it, and check the current
+<code>q</code> string.</td>
+</tr>
+<tr>
+<td>NULL/None/NA/NaN in the joined result</td>
+<td>Inspect whether the right-side record matched before replacing
+anything.</td>
+</tr>
+<tr>
+<td>AI access or runtime unavailable</td>
+<td>Use the supplied draft; pair with a working runtime and take the
+reviewer role.</td>
+</tr>
+</tbody>
+</table>
+<p>Before leaving, explain <strong>10 INNER JOIN rows versus 11 LEFT
+JOIN rows</strong>, and name a check beyond “it ran.” Save your SQL and
+evidence. No new graded submission is introduced here. Next meeting: 5
+November, APIs/JSON and validating external data.</p>
+</body>
+</html>
