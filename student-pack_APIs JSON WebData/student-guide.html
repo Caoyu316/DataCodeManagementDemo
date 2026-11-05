@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>DCM · APIs, JSON &amp; Web Data</title>
+  <style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+  <style type="text/css">body { max-width: 850px; margin: 50px auto; padding: 0 28px; font: 18px/1.6 'Liberation Sans', Arial, sans-serif; color: #17262b; }
+h1 { font-size: 38px; line-height: 1.15; color: #23373b; border-top: 5px solid #6a5acd; padding-top: 25px; }
+h2 { margin-top: 45px; color: #373895; } h3 { color: #465a65; }
+a { color: #a53d7c; } pre { background: #f5f7fa; padding: 18px 22px; border-radius: 10px; overflow-x: auto; }
+code { font-family: 'Liberation Mono', monospace; font-size: .88em; } blockquote { border-left: 5px solid #a53d7c; margin-left: 0; padding: 10px 20px; background: #f9f0f6; }
+table { border-collapse: collapse; width: 100%; } td,th { text-align: left; padding: 10px; border-bottom: 1px solid #dce0ed; }
+@media print { body { margin: 0; font-size: 11pt; } pre { white-space: pre-wrap; } h2,h3 { break-after: avoid; } }
+</style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">DCM · APIs, JSON &amp; Web Data</h1>
+<p class="date">Thursday, 5 November 2026</p>
+</header>
+<p><strong>Question:</strong> how large were the populations of
+Switzerland, France and Germany in 2024, and how did they change from
+2023? We need six country–year observations, in persons, for indicator
+<code>SP.POP.TOTL</code>.</p>
+<p>The lecture demonstrations use Python; choose Python
+<strong>or</strong> R for your own work. Every required activity works
+offline. No API key, account or paid AI service is needed. A saved
+response is evidence for one version, not a promise that historical
+estimates never change. Population is not customer demand or a
+market-entry recommendation.</p>
+<h2 id="start">Start here</h2>
+<p>Extract <code>student-pack.zip</code> into a new folder and open that
+folder in VS Code. Use that folder as your terminal working directory.
+Python needs pandas from Code Literacy I; everything else is standard
+library. R needs jsonlite and base R. Check your chosen route before
+class:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> <span class="at">-c</span> <span class="st">&quot;import json, urllib.request, pandas; print(&#39;Python ready&#39;)&quot;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">--vanilla</span> <span class="at">-e</span> <span class="st">&#39;library(jsonlite); cat(&quot;R ready\n&quot;)&#39;</span></span></code></pre></div>
+<p>Only run the line for your language. If needed, install
+<strong>before class</strong> in the same environment selected in VS
+Code: <code>python3 -m pip install pandas</code> or, at the R prompt,
+<code>install.packages(&quot;jsonlite&quot;)</code>. Installation needs internet;
+the lesson does not. See <a href="https://pandas.pydata.org/docs/getting_started/install.html">pandas
+installation</a> and <a href="https://cran.r-project.org/package=jsonlite">jsonlite on CRAN</a>.
+Re-run the preflight in your selected runtime. During class, pair with a
+working machine: one person predicts and reviews, one runs. Keep a note
+of what you ran and what you observed.</p>
+<p>From the extracted folder:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> <span class="at">-i</span> apis.py</span></code></pre></div>
+<p>Or start <code>R --vanilla</code>, then at its prompt:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;apis.R&quot;</span>)</span></code></pre></div>
+<p>The starter loads a labeled OFFLINE snapshot and reports six records.
+It does not run the unfinished extraction. Shell commands belong in the
+terminal, not at Python’s <code>&gt;&gt;&gt;</code> or R’s
+<code>&gt;</code> prompt. Exit/restart after editing a Python file;
+source again or restart R after editing. <code>python</code> or
+<code>py</code> can replace <code>python3</code> if that is your normal
+launcher.</p>
+<h3 id="files-in-your-pack">Files in your pack</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>File/folder</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>data/raw/</code></td>
+<td>Four genuine captured World Bank bodies; do not edit</td>
+</tr>
+<tr>
+<td><code>data/provenance.json</code>, <code>data/README.md</code></td>
+<td>Requests, hashes, definition, source, units, capture
+limitations</td>
+</tr>
+<tr>
+<td><code>data/constructed/</code></td>
+<td>Clearly labeled teaching modifications; not authentic
+measurements</td>
+</tr>
+<tr>
+<td><code>apis.py</code> / <code>.R</code></td>
+<td>Manual starter, three TODO fields</td>
+</tr>
+<tr>
+<td><code>support.py</code> / <code>.R</code></td>
+<td>Supplied validation and analysis infrastructure; read if useful</td>
+</tr>
+<tr>
+<td><code>checkpoint.py</code> / <code>.R</code></td>
+<td>Public complete checkpoint after your attempt or if blocked</td>
+</tr>
+<tr>
+<td><code>ai-draft.py</code> / <code>.R</code></td>
+<td>Intentionally flawed teaching draft, not an actual model
+transcript</td>
+</tr>
+<tr>
+<td><code>my-check.py</code> / <code>.R</code></td>
+<td>Runnable scaffold for your independently chosen extra case</td>
+</tr>
+<tr>
+<td><code>checks.py</code> / <code>.R</code></td>
+<td>Independent expected values and failure cases; keep unchanged</td>
+</tr>
+<tr>
+<td><code>fetch.py</code> / <code>fetch.R</code></td>
+<td>Optional explicit live retrieval; never runs automatically</td>
+</tr>
+</tbody>
+</table>
+<p>The pack includes everything you need: starters, a complete
+checkpoint, checks and worked answers. Try each activity before opening
+its answer.</p>
+<h2 id="request">Request and source meaning</h2>
+<p>The single-line request used for the full approved snapshot is:</p>
+<pre class="text"><code>https://api.worldbank.org/v2/country/che;fra;deu/indicator/SP.POP.TOTL?date=2023:2024&amp;format=json&amp;per_page=100</code></pre>
+<p>The path identifies countries and indicator; the query selects years,
+JSON and page size. One page is not always the whole result. For this
+small request, verify pages=1, total=6 and the exact six keys. A general
+client would follow all documented pages/cursors; we are not building
+one today. <a href="https://datahelpdesk.worldbank.org/knowledgebase/articles/898581-api-basic-call-structures">World
+Bank request documentation</a>.</p>
+<p>The indicator means midyear resident population estimates, in
+persons, not GDP. The response’s blank <code>unit</code> does not mean
+unitless. <a href="https://databank.worldbank.org/metadataglossary/world-development-indicators/series/SP.POP.TOTL">Definition</a>
+and <a href="https://data.worldbank.org/indicator/SP.POP.TOTL">World
+Bank WDI source/license (CC BY 4.0)</a>. Underlying demographic sources
+include UN Population Division, national statistical offices and
+Eurostat. Attribution and capture details are retained with the
+data.</p>
+<h3 id="a-minimal-live-get-optional-slides-1315">A minimal live GET
+(optional; slides 13–15)</h3>
+<p>The URL chooses CHE/FRA/DEU, population (<code>SP.POP.TOTL</code>),
+years 2023–2024, JSON and a maximum of two records per page. <a href="https://api.worldbank.org/v2/country/che;fra;deu/indicator/SP.POP.TOTL?date=2023:2024&amp;format=json&amp;per_page=2">Open
+this request</a>. Live code requires internet; the archived route below
+works offline.</p>
+<p>Copy <strong>one</strong> complete block into a new file in your
+extracted folder: <code>request-demo.R</code> or
+<code>request-demo.py</code>. Run
+<code>Rscript --vanilla request-demo.R</code> or
+<code>python3 request-demo.py</code> in the VS Code terminal. R needs
+only existing jsonlite; Python uses only its standard library. Stop
+after ten seconds if the service stalls; do not retry during class.</p>
+<p>R — GET saves fresh bytes; jsonlite parses the saved response:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r live-example"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>url <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;https://api.worldbank.org/v2/country/che;fra;deu/indicator/&quot;</span>,</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;SP.POP.TOTL?date=2023:2024&amp;format=json&amp;per_page=2&quot;</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">timeout =</span> <span class="dv">8</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>snapshot <span class="ot">&lt;-</span> <span class="fu">tempfile</span>(<span class="at">fileext =</span> <span class="st">&quot;.json&quot;</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">download.file</span>(url, snapshot, <span class="at">mode =</span> <span class="st">&quot;wb&quot;</span>, <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>partial <span class="ot">&lt;-</span> jsonlite<span class="sc">::</span><span class="fu">fromJSON</span>(snapshot, <span class="at">simplifyVector =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(partial[[<span class="dv">2</span>]])</span></code></pre></div>
+<p>Python — GET exposes HTTP status and body; save bytes, then parse
+JSON:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python live-example"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json, tempfile, urllib.request</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> (<span class="st">&quot;https://api.worldbank.org/v2/country/che;fra;deu/indicator/&quot;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>       <span class="st">&quot;SP.POP.TOTL?date=2023:2024&amp;format=json&amp;per_page=2&quot;</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> urllib.request.urlopen(url, timeout<span class="op">=</span><span class="dv">8</span>) <span class="im">as</span> response:</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(response.status)<span class="op">;</span> raw <span class="op">=</span> response.read()</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> tempfile.TemporaryFile() <span class="im">as</span> snapshot:</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    snapshot.write(raw)<span class="op">;</span> snapshot.seek(<span class="dv">0</span>)<span class="op">;</span> partial <span class="op">=</span> json.load(snapshot)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">len</span>(partial[<span class="dv">1</span>]))</span></code></pre></div>
+<p>For the captured behavior, R prints <code>[1] 2</code>; Python prints
+<code>200</code> then <code>2</code>. These are expected outcomes, not
+guarantees about future responses. <code>response.status</code> is the
+urllib equivalent of <code>response.status_code</code> in requests. The
+R downloader’s return code is not an HTTP status. In a browser use
+<strong>Network → reload → select the API request → Headers → Status
+Code</strong>; the main page displays only the body. Check HTTP success,
+JSON syntax, application errors and usable observations separately.</p>
+<p>Temporary files demonstrate the snapshot step; Python deletes its
+file at the end of the <code>with</code> block, and R uses its temporary
+directory. For a durable capture with URL/time/hash provenance use the
+existing fetchers below. Never replace <code>data/raw/</code> with a
+fresh response.</p>
+<p><strong>Offline alternative:</strong> in the extracted folder,
+Python:
+<code>from support import load; partial = load(&quot;raw/population-page1.json&quot;)</code>;
+R:
+<code>source(&quot;support.R&quot;); partial &lt;- load_data(&quot;raw/population-page1.json&quot;)</code>.
+These read the archived response without making a request. Inspect
+<code>partial[0]</code> / <code>partial[[1]]</code> for metadata and
+count <code>len(partial[1])</code> / <code>length(partial[[2]])</code>:
+two records, page 1 of 3, total 6. Increasing <code>per_page</code> to
+100 changes page capacity, not the six matching country–year
+observations. For analysis use the full approved snapshot through the
+public checkpoint, since the partial response lacks four keys.</p>
+<h3 id="optional-retrieve-a-fresh-response">Optional: retrieve a fresh
+response</h3>
+<p>Python:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> fetch.py</span></code></pre></div>
+<p>R:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">--vanilla</span> fetch.R</span></code></pre></div>
+<p>For optional R retrieval only, install <code>curl</code> (HTTP) and
+<code>openssl</code> (SHA-256) <strong>before class</strong>, alongside
+the existing <code>jsonlite</code>:
+<code>install.packages(c(&quot;curl&quot;, &quot;openssl&quot;))</code>. <a href="https://jeroen.r-universe.dev/curl/doc/manual.html">curl
+documentation</a>. These extra packages are not needed for the offline R
+activities. Run terminal commands from your extracted folder. If you
+already have an <strong>R console open in VS Code</strong>, use:</p>
+<pre class="text"><code>source(&quot;fetch.R&quot;)
+fetch_main(character())</code></pre>
+<p>Select the extracted folder as your working directory before the
+first line, or give <code>source()</code> the full path to
+<code>fetch.R</code>. Sourcing only defines helpers; the second line
+explicitly starts retrieval and returns to your console.
+<code>Rscript --vanilla fetch.R</code> belongs in a terminal, not at the
+R prompt. The script saves data beside itself, even if you later change
+your working directory.</p>
+<p>One explicit attempt, a ten-second wall-clock deadline, no retries.
+It prints status/content type and retains response bytes and provenance
+in a <strong>new</strong> <code>data/live/</code> directory. It never
+overwrites approved raw snapshots. A failed or non-JSON response is not
+a usable population capture; inspect its manifest/body. If the request
+fails or times out, continue with the saved snapshot loaded by your
+starter. Skip this optional command when working offline. Both Python
+and R activities use the same saved data.</p>
+<p>Success has layers: a network response, successful HTTP status,
+expected content type, valid JSON, expected application structure,
+required observations, then meaningful analysis. 4xx indicates a
+request/access problem, 429 rate limiting and 5xx a server problem; 200
+still does not establish usable data. The supplied helper handles
+request failures; you do not need to write an exception handler.</p>
+<h2 id="json">Read the JSON before extracting</h2>
+<p>The root array has two elements: metadata, then an array of records.
+Each record is an object with nested country and indicator objects.
+Names identify fields; position identifies array elements. JSON string
+<code>&quot;2024&quot;</code>, number <code>9005582</code>, <code>null</code>,
+absent key, empty string and Boolean <code>false</code> are different
+things.</p>
+<p>Predict, then run in the Python starter:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">type</span>(payload).<span class="va">__name__</span>, <span class="bu">len</span>(payload))</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>record <span class="op">=</span> payload[<span class="dv">1</span>][<span class="dv">0</span>]</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(record[<span class="st">&quot;country&quot;</span>][<span class="st">&quot;value&quot;</span>])</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(record[<span class="st">&quot;countryiso3code&quot;</span>])</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(record[<span class="st">&quot;date&quot;</span>], record[<span class="st">&quot;value&quot;</span>])</span></code></pre></div>
+<p>R alternative:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>record <span class="ot">&lt;-</span> payload[[<span class="dv">2</span>]][[<span class="dv">1</span>]]</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(record<span class="sc">$</span>country<span class="sc">$</span>value)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(record<span class="sc">$</span>countryiso3code)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(record<span class="sc">$</span>date)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(record<span class="sc">$</span>value)</span></code></pre></div>
+<details>
+<summary>
+Check your prediction
+</summary>
+<p>Literal Python output (not display-formatted):</p>
+<pre class="text"><code>list 2
+Switzerland
+CHE
+2024 9005582</code></pre>
+<p>The year is a string even though <code>print</code> omits its
+quotation marks. First record in this snapshot: Switzerland, CHE, string
+<code>&quot;2024&quot;</code>, number 9005582. <code>country.value</code> is a
+name; <code>indicator.value</code> is a label; the record-level
+<code>value</code> is the population. Python starts at 0; R starts at 1.
+First-record inspection is not a robust way to identify a country for
+analysis: use code and year.</p>
+</details>
+<h2 id="manual">Activity A — one row per country–year</h2>
+<p><strong>6 minutes:</strong> 1 minute predict; 3 minutes complete the
+three TODOs in <code>manual_table()</code> in your starter; 2 minutes
+restart, run and compare. The loop and country name are supplied. Set
+country code, integer year and population value. Work manually before
+AI.</p>
+<p>Expected columns: <code>country_code</code>,
+<code>country_name</code>, <code>year</code>, <code>population</code>.
+One row is one country’s population estimate for one year. Do not change
+raw records or reorder values separately from their keys.</p>
+<p>After editing and restarting, run these commands in your
+<strong>existing starter session</strong>. They validate your actual
+manual table, not a replacement made by the checkpoint. Before editing,
+the starter should fail the key checks; that is intentional.</p>
+<!-- workflow:manual-python -->
+<div class="sourceCode" id="cb13"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>manual <span class="op">=</span> manual_table()</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(check_table(manual))</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(check_source(manual, payload))</span></code></pre></div>
+<!-- workflow:manual-r -->
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>manual <span class="ot">&lt;-</span> <span class="fu">manual_table</span>()</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">check_table</span>(manual))</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">check_source</span>(manual, payload))</span></code></pre></div>
+<p><code>check_table</code> checks structure: columns, six unique keys
+and allowed value types. <code>check_source</code> checks fidelity:
+<strong>every</strong> country name and population must agree with the
+source record having that country code and year. Correct keys with all
+populations replaced by zero pass the structural checks but fail source
+fidelity. A zero or null genuinely present in the supplied input is
+valid when preserved. These checks provide evidence for this bounded
+task, not universal correctness.</p>
+<details>
+<summary>
+Worked fields — reveal after attempting
+</summary>
+<p>Python fields: <code>record[&quot;countryiso3code&quot;]</code>,
+<code>int(record[&quot;date&quot;])</code>, <code>record[&quot;value&quot;]</code>. R
+fields: <code>record$countryiso3code</code>,
+<code>as.integer(record$date)</code>, <code>record$value</code>.</p>
+</details>
+<h3 id="checkpoint">Required transition — everyone uses the public
+checkpoint</h3>
+<p><strong>Do this even if your manual extraction worked and you did not
+open the answer.</strong> Keep <code>manual</code> as your own result;
+the following imports/source statements supply names needed for Activity
+B. Run them at the language prompt, outside any optional answer.</p>
+<!-- workflow:checkpoint-python -->
+<div class="sourceCode" id="cb15"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> checkpoint <span class="im">import</span> extract</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> support <span class="im">import</span> load, compare, check_source</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>table <span class="op">=</span> extract(payload)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(compare(table))</span></code></pre></div>
+<!-- workflow:checkpoint-r -->
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;checkpoint.R&quot;</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>table <span class="ot">&lt;-</span> <span class="fu">extract</span>(payload)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">compare</span>(table))</span></code></pre></div>
+<p>If you restarted without the starter, first run
+<code>python3 -i apis.py</code>, or <code>source(&quot;apis.R&quot;)</code> in a
+fresh R session. Both define <code>payload</code>. The transition above
+is then required. The checkpoint is included in your pack so you can
+continue even if your manual task is unfinished.</p>
+<h3 id="results">Checked comparison</h3>
+<table>
+<thead>
+<tr>
+<th>Country</th>
+<th style="text-align: right;">2023 persons</th>
+<th style="text-align: right;">2024 persons</th>
+<th style="text-align: right;">Increase</th>
+<th style="text-align: right;">Growth</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CHE</td>
+<td style="text-align: right;">8,888,822</td>
+<td style="text-align: right;">9,005,582</td>
+<td style="text-align: right;">116,760</td>
+<td style="text-align: right;">1.314%</td>
+</tr>
+<tr>
+<td>DEU</td>
+<td style="text-align: right;">83,287,273</td>
+<td style="text-align: right;">83,516,593</td>
+<td style="text-align: right;">229,320</td>
+<td style="text-align: right;">0.275%</td>
+</tr>
+<tr>
+<td>FRA</td>
+<td style="text-align: right;">68,372,286</td>
+<td style="text-align: right;">68,551,653</td>
+<td style="text-align: right;">179,367</td>
+<td style="text-align: right;">0.262%</td>
+</tr>
+</tbody>
+</table>
+<p>Growth (%) = (population_2024 - population_2023) / population_2023 ×
+100.</p>
+<p>Switzerland: (9,005,582 - 8,888,822) / 8,888,822 × 100 ≈
+<strong>1.314%</strong>. Independently calculate one country’s
+difference and rate from its two raw records. Germany is largest and has
+the largest absolute increase; Switzerland has the largest proportional
+increase in this snapshot. Do not round inputs before computing. This
+does not establish purchasing power, market demand or causes of
+population change.</p>
+<h2 id="diagnose">Activity B — Should our pipeline accept these
+data?</h2>
+<p><strong>Diagnosis only: keep code and data unchanged.</strong> Choose
+one decision per case:</p>
+<ul>
+<li><strong>A · ACCEPT:</strong> construct the table and calculate
+growth.</li>
+<li><strong>B · ACCEPT WITH MISSING VALUE:</strong> retain the row, but
+block the complete growth calculation.</li>
+<li><strong>C · REJECT:</strong> stop because the response is invalid or
+incomplete.</li>
+</ul>
+<p><strong>2 minutes:</strong> predict A, B or C for all six cases.
+<strong>2 minutes:</strong> inspect the supplied JSON in VS Code and run
+the checker in one language. <strong>1 minute:</strong> explain one
+surprising result. Response validation and table construction happen in
+<code>extract()</code>; calculation requirements are checked separately
+by <code>compare()</code>.</p>
+<p>Open these files under <code>data/</code> in the extracted student
+pack:</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Case</th>
+<th>File (relative to the extracted folder)</th>
+<th>Your A/B/C prediction</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Full response</td>
+<td><a href="data/raw/population-2023-2024.json">data/raw/population-2023-2024.json</a></td>
+<td></td>
+</tr>
+<tr>
+<td>Partial page (<code>per_page=2</code>)</td>
+<td><a href="data/raw/population-page1.json">data/raw/population-page1.json</a></td>
+<td></td>
+</tr>
+<tr>
+<td>Invalid indicator</td>
+<td><a href="data/raw/invalid-indicator.json">data/raw/invalid-indicator.json</a></td>
+<td></td>
+</tr>
+<tr>
+<td>Unavailable year (2030)</td>
+<td><a href="data/raw/unavailable-year.json">data/raw/unavailable-year.json</a></td>
+<td></td>
+</tr>
+<tr>
+<td>Absent <code>value</code> field — <strong>synthetic</strong></td>
+<td><a href="data/constructed/missing-value.json">data/constructed/missing-value.json</a></td>
+<td></td>
+</tr>
+<tr>
+<td>Explicit <code>value: null</code> — <strong>synthetic</strong></td>
+<td><a href="data/constructed/null-value.json">data/constructed/null-value.json</a></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>The first four are genuine archived World Bank responses. The two
+constructed examples deliberately alter CHE/2024 in the full capture and
+are not observations about Switzerland.</p>
+<p>From the extracted folder, run <strong>one</strong> command in the VS
+Code terminal:</p>
+<p>Python:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> checks.py checkpoint.py</span></code></pre></div>
+<p>R:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">--vanilla</span> checks.R checkpoint.R</span></code></pre></div>
+<p>Expect <strong>12/12 passing checks</strong>, including checks that
+invalid inputs are rejected. <strong>PASS for a rejection test means the
+pipeline correctly stopped on the problematic response.</strong> It does
+not mean the response was accepted. The suite also checks associations
+and other cases beyond these six. Passing selected tests supplies
+evidence, not a universal guarantee. Keep your predictions, compare with
+results, then open the solution below.</p>
+<details>
+<summary>
+Activity B solution — decisions, reasons and optional inspection code
+</summary>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>Case</th>
+<th>Decision</th>
+<th>Response/table validation (<code>extract</code>)</th>
+<th>Growth (<code>compare</code>)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Full response</td>
+<td><strong>A</strong></td>
+<td>Accept six country–year observations</td>
+<td>Calculate growth</td>
+</tr>
+<tr>
+<td>Partial page</td>
+<td><strong>C</strong></td>
+<td>Reject incomplete coverage: page 1 of 3, only two observations</td>
+<td>Do not calculate</td>
+</tr>
+<tr>
+<td>Invalid indicator</td>
+<td><strong>C</strong></td>
+<td>Reject the application-level error</td>
+<td>Do not calculate</td>
+</tr>
+<tr>
+<td>Unavailable 2030</td>
+<td><strong>C</strong></td>
+<td>Reject: no observations available; this is not population zero</td>
+<td>Do not calculate</td>
+</tr>
+<tr>
+<td>Synthetic absent <code>value</code></td>
+<td><strong>C</strong></td>
+<td>Reject: a required field is absent</td>
+<td>Do not calculate</td>
+</tr>
+<tr>
+<td>Synthetic explicit <code>value: null</code></td>
+<td><strong>B</strong></td>
+<td>Keep all six rows, including CHE/2024 with missing population</td>
+<td>Reject the complete growth calculation</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Absent field ≠ explicit null ≠ numerical zero.</strong> The
+Python table stores this missing numeric population as <code>NaN</code>;
+R uses <code>NA</code>. Numerical zero stays a number; it must not be
+invented to fill missing data. A zero baseline separately makes
+percentage growth undefined. An empty string is neither null nor
+zero.</p>
+<p>In R, accessing an absent field and explicit JSON null can both
+return <code>NULL</code>. Check <code>&quot;value&quot; %in% names(record)</code>
+<strong>before</strong> interpreting <code>record$value</code>; the
+supplied helper already does this.</p>
+<p>Optional inspection in your existing public-checkpoint session (not
+required to run the terminal checker):</p>
+<p>Inspect the genuine partial capture:</p>
+<!-- workflow:diagnosis-python -->
+<div class="sourceCode" id="cb19"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>partial <span class="op">=</span> load(<span class="st">&quot;raw/population-page1.json&quot;</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(partial[<span class="dv">0</span>])</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>([r[<span class="st">&quot;countryiso3code&quot;</span>] <span class="cf">for</span> r <span class="kw">in</span> partial[<span class="dv">1</span>]])</span></code></pre></div>
+<!-- workflow:diagnosis-r -->
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>partial <span class="ot">&lt;-</span> <span class="fu">load_data</span>(<span class="st">&quot;raw/population-page1.json&quot;</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(partial[[<span class="dv">1</span>]])</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">vapply</span>(partial[[<span class="dv">2</span>]], <span class="cf">function</span>(r) r<span class="sc">$</span>countryiso3code, <span class="fu">character</span>(<span class="dv">1</span>)))</span></code></pre></div>
+<h3 id="check-null-without-turning-it-into-zero">Check null without
+turning it into zero</h3>
+<!-- workflow:null-python -->
+<div class="sourceCode" id="cb21"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>missing_table <span class="op">=</span> extract(load(<span class="st">&quot;constructed/null-value.json&quot;</span>))</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(missing_table.loc[(missing_table.country_code <span class="op">==</span> <span class="st">&quot;CHE&quot;</span>) <span class="op">&amp;</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>                        (missing_table.year <span class="op">==</span> <span class="dv">2024</span>), <span class="st">&quot;population&quot;</span>].isna().<span class="bu">all</span>())</span></code></pre></div>
+<!-- workflow:null-r -->
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>missing_table <span class="ot">&lt;-</span> <span class="fu">extract</span>(<span class="fu">load_data</span>(<span class="st">&quot;constructed/null-value.json&quot;</span>))</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>selected <span class="ot">&lt;-</span> missing_table<span class="sc">$</span>country_code<span class="sc">==</span><span class="st">&quot;CHE&quot;</span> <span class="sc">&amp;</span> missing_table<span class="sc">$</span>year<span class="sc">==</span><span class="dv">2024</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">is.na</span>(missing_table<span class="sc">$</span>population[selected]))</span></code></pre></div>
+<p>Python prints <code>True</code>; R prints <code>[1] TRUE</code>.
+Python dataframe represents this missing numeric value as NaN; R uses
+NA_real_. In R, check <code>&quot;value&quot; %in% names(record)</code>
+<strong>before</strong> interpreting <code>record$value</code>: an
+absent field and explicit JSON null can both produce NULL when accessed.
+Our helper checks presence separately. Calling
+<code>compare(missing_table)</code> must stop with a useful
+missing-population error.</p>
+</details>
+<p>Now that we know how the pipeline should behave, can we detect and
+repair code that violates these expectations? <strong>Activity C starts
+the repair work.</strong></p>
+<h2 id="ai">Activity C — discover, repair and independently verify</h2>
+<p>Activity B defined correct behavior. Now test plausible code against
+those expectations before asking for a repair. <strong>14 minutes total:
+4 minutes discovery, then 10 minutes repair/verification.</strong>
+Choose Python or R throughout.</p>
+<h3 id="part-1-it-runs.-but-does-it-work-4-minutes">Part 1 — It runs.
+But does it work? (4 minutes)</h3>
+<p><strong>1 minute — explain first:</strong> open
+<code>ai-draft.py</code> or <code>ai-draft.R</code> in VS Code. Give the
+assistant the complete draft and matching <code>support</code> file,
+with this prompt:</p>
+<blockquote>
+<p>Explain what extract(payload) does: its input, output and
+assumptions. Do not rewrite or repair it yet.</p>
+</blockquote>
+<p>The draft is <strong>deliberately flawed teaching code of a kind an
+AI assistant might propose, not an actual AI transcript</strong>. No AI?
+Ask your partner to trace its input, output and assumptions. If the
+assistant stalls, use partner explanation immediately.</p>
+<p><strong>1 minute — try the original data:</strong> open a terminal in
+the extracted student folder. Start <strong>one</strong> interactive
+session: <code>python3</code> or <code>R --vanilla</code>. Paste the
+corresponding block at its prompt (not in the shell):</p>
+<p>Python interactive session:</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> runpy <span class="im">import</span> run_path</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> support <span class="im">import</span> load, compare</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>extract <span class="op">=</span> run_path(<span class="st">&quot;ai-draft.py&quot;</span>)[<span class="st">&quot;extract&quot;</span>]</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>payload <span class="op">=</span> load()</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>tab <span class="op">=</span> extract(payload)</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(compare(tab))</span></code></pre></div>
+<p>R interactive session:</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;support.R&quot;</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;ai-draft.R&quot;</span>)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>payload <span class="ot">&lt;-</span> <span class="fu">load_data</span>()</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">extract</span>(payload)</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">compare</span>(tab))</span></code></pre></div>
+<p>These blocks explicitly load the draft, replacing any earlier
+checkpoint <code>extract</code>. Expect the same plausible
+six-observation comparison as before: growth about CHE 1.314%, DEU
+0.275%, FRA 0.262%. In Python, <code>run_path</code> loads the
+hyphenated filename and retrieves its <code>extract</code> function.</p>
+<p><strong>2 minutes — challenge it:</strong> open a <strong>separate VS
+Code terminal</strong> in the same extracted folder (Terminal → New
+Terminal). Run one shell command:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> checks.py ai-draft.py</span></code></pre></div>
+<p>Or:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">--vanilla</span> checks.R ai-draft.R</span></code></pre></div>
+<p><strong>Expected: 8 of 12 checks fail; exit status 1.</strong> This
+failure is intentional. Read one failing case and connect it to Activity
+B. Keep the output for comparison later. Ask: <strong>“The function
+works on our original data. Why shouldn’t we trust it?”</strong> Neither
+a convincing explanation nor a normal-data result establishes correct
+behavior on other inputs. Do not repair yet.</p>
+<h3 id="part-2-can-ai-repair-it-10-minutes">Part 2 — Can AI repair it?
+(10 minutes)</h3>
+<p><strong>1 minute copy/predict · 2 minutes propose · 2 minutes inspect
+· 4 minutes test · 1 minute decide.</strong></p>
+<ol type="1">
+<li>In VS Code Explorer, right-click <code>ai-draft.py</code> →
+<strong>Copy</strong>, right-click the folder → <strong>Paste</strong>,
+then rename the copy <code>repair.py</code>. For R use
+<code>ai-draft.R</code> → <code>repair.R</code>. Keep both in the
+extracted folder. Open the copy, not the original.</li>
+<li>Use Activity B’s solution matrix to state the required behavior:
+preserve country–year/name/value associations; retain explicit null as
+missing; reject incomplete coverage, malformed responses, missing
+required fields and application errors. Do not modify raw data, supplied
+checks or expected outcomes.</li>
+<li>Open <code>my-check.py</code> or <code>my-check.R</code>. Before
+asking AI, independently choose another baseline key (e.g. FRA/2023),
+change <code>CODE</code> and write your prediction in a comment. Or
+design another case by editing the mutation/assertions. Never alter raw
+data. The supplied null case covers CHE/2024; a different baseline case
+tests missingness in the denominator and another country. Explain that
+extra coverage; an unchanged scaffold is not your own design.</li>
+</ol>
+<h3 id="bounded-prompt-and-exact-context">Bounded prompt and exact
+context</h3>
+<p>Give the assistant the <strong>complete contents of your
+<code>repair.py</code> and <code>support.py</code></strong>, or
+<strong><code>repair.R</code> and <code>support.R</code></strong>, plus
+the prompt below and the revealed Activity B solution table. Also
+provide <code>data/constructed/null-value.json</code> as the public
+sample. These are all in the pack. Keep <code>checks</code> and your
+predicted extra case independent; do not ask the assistant to rewrite
+them. No private data or credentials.</p>
+<blockquote>
+<p>Repair only extract(payload) and necessary imports/source statements.
+Use the supplied support helpers unchanged. Preserve the four columns,
+country–year/name/value associations and explicit null as missing.
+Require the specified indicator and six unique country–year keys. Reject
+incomplete or malformed responses, absent required fields and
+application errors. Do not change data, checks, expected outcomes,
+dependencies or helper code. Return the complete repair file and explain
+each change; I will test it independently.</p>
+</blockquote>
+<p>Permitted setup: Python may keep <code>import pandas as pd</code> and
+import <code>validate_envelope, check_table</code> from
+<code>support</code>; R may <code>source(&quot;support.R&quot;)</code>. Keep the
+existing signature. No network, input mutation or hidden solution
+imports. The complete growth calculation must still reject missing
+inputs.</p>
+<p>Paste the proposed complete file into <code>repair.py</code> /
+<code>.R</code>, then save. To compare in VS Code Explorer: right-click
+<code>ai-draft.py</code> → <strong>Select for Compare</strong>;
+right-click <code>repair.py</code> → <strong>Compare with
+Selected</strong> (equivalent R files). Read the additions/removals side
+by side. Explain the validation call, missing-value treatment and final
+table check <strong>before running</strong>. If AI proposes changes
+elsewhere, reject that scope expansion. A second AI’s agreement is not
+independent evidence.</p>
+<h3 id="run-the-existing-and-your-additional-checks">Run the existing
+and your additional checks</h3>
+<p>Exact terminal commands, from the extracted folder:</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> checks.py repair.py</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> my-check.py repair.py</span></code></pre></div>
+<p>Or:</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">--vanilla</span> checks.R repair.R</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">--vanilla</span> my-check.R repair.R</span></code></pre></div>
+<p>Both launch fresh processes and print the candidate name. The
+supplied suite must pass 12/12 as necessary evidence for this task; your
+separate scaffold should print
+<code>PASS extra case: missing baseline</code>. A failed assertion/error
+is evidence to investigate, not a reason to weaken the expectation. The
+scaffold needs only the candidate file and public support/data; no
+additional solution file or interactive state. Decide whether your case
+extends coverage: name the new country/year/edge and the plausible error
+it catches. Repeating the supplied case adds little evidence. Passing
+these cases is not a proof for all possible responses.</p>
+<h3 id="complete-partner-review-fallback-same-10-minutes">Complete
+partner-review fallback (same 10 minutes)</h3>
+<p>During discovery, partners explain and run the draft before
+repairing. During the ten-minute repair phase, one partner predicts and
+edits the extra-case scaffold; the other proposes the repair. Read
+<code>support</code> and the draft together. Replace the unchecked
+record iteration with <code>validate_envelope(payload)</code>, preserve
+each original value (R converts only explicit NULL to NA_real_), and
+return <code>check_table</code> of the rows. Add the permitted
+import/source statement. If blocked after the two-minute repair attempt,
+open the worked repair below and copy it into the repair file. Still
+perform the VS Code comparison, explain each change, and run
+<strong>both</strong> check commands. Swap roles for interpreting
+failures. Record the same acceptance note; state that this was partner
+review, not AI use. This fallback is entirely offline.</p>
+<details>
+<summary>
+Worked repair — reveal after inspecting and testing
+</summary>
+<p>Python (<code>repair.py</code> can contain this complete
+version):</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co">&quot;&quot;&quot;Worked repair: only extract and its necessary imports.&quot;&quot;&quot;</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> support <span class="im">import</span> validate_envelope, check_table</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> extract(payload):</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>    records <span class="op">=</span> validate_envelope(payload)</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>    rows <span class="op">=</span> []</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> record <span class="kw">in</span> records:</span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>        rows.append({</span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;country_code&quot;</span>: record[<span class="st">&quot;countryiso3code&quot;</span>],</span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;country_name&quot;</span>: record[<span class="st">&quot;country&quot;</span>][<span class="st">&quot;value&quot;</span>],</span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;year&quot;</span>: <span class="bu">int</span>(record[<span class="st">&quot;date&quot;</span>]),</span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;population&quot;</span>: record[<span class="st">&quot;value&quot;</span>],</span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>        })</span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> check_table(pd.DataFrame(rows))</span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a></span></code></pre></div>
+<p>R (<code>repair.R</code>):</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Public complete checkpoint: source from practice folder, then extract(load_data()).</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;support.R&quot;</span>)</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>extract <span class="ot">&lt;-</span> <span class="cf">function</span>(payload) {</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  records <span class="ot">&lt;-</span> <span class="fu">validate_envelope</span>(payload)</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  rows <span class="ot">&lt;-</span> <span class="fu">lapply</span>(records, <span class="cf">function</span>(record) {</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>    value <span class="ot">&lt;-</span> record<span class="sc">$</span>value</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">is.null</span>(value)) value <span class="ot">&lt;-</span> <span class="cn">NA_real_</span></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(<span class="at">country_code=</span>record<span class="sc">$</span>countryiso3code,</span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>               <span class="at">country_name=</span>record<span class="sc">$</span>country<span class="sc">$</span>value,</span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>               <span class="at">year=</span><span class="fu">as.integer</span>(record<span class="sc">$</span>date), <span class="at">population=</span>value)</span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">check_table</span>(<span class="fu">do.call</span>(rbind, rows))</span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</details>
+<h3 id="decision-note">Decision note</h3>
+<p>Save four sentences: my prediction; input/check and observed outcome;
+changed line and why it matters; accept/reject plus remaining limits.
+Mention whether/how AI helped. Passing selected checks is evidence for
+this contract, not universal robustness.</p>
+<h2 id="transfer">Transfer: an unfamiliar response</h2>
+<p>Open <code>data/constructed/stock.json</code>. It is an invented
+warehouse response with <code>items</code> and <code>next_cursor</code>,
+not a real API capture. Give a path to A’s available stock, one
+completeness check and a conclusion you cannot make yet.</p>
+<details>
+<summary>
+Reasoning
+</summary>
+<p>Python path: <code>stock[&quot;items&quot;][0][&quot;stock&quot;][&quot;available&quot;]</code>; R:
+<code>stock$items[[1]]$stock$available</code>. A has numeric zero; B has
+explicit null; C lacks the field. A non-null next_cursor says more
+records remain. Need documentation and remaining pages plus a
+missingness policy before claiming complete total stock. Do not assume
+World Bank’s two-element envelope applies here.</p>
+</details>
+<h2 id="handover">Reproducible handover — guided follow-up</h2>
+<p>Preserve raw JSON plus request URL/parameters, source/indicator/unit
+definition, capture UTC/date, provider update and a content hash.
+Observation year, retrieval time and update date differ. Keep
+constructed examples and new live captures separately labeled. Save
+analysis and checks; rerun from a fresh terminal using the printed
+commands. A checksum identifies bytes, not statistical correctness.</p>
+<p>After class, close your interactive session and run from a fresh
+terminal:</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> checkpoint.py</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> checks.py repair.py</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> my-check.py repair.py</span></code></pre></div>
+<p>R alternative:</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">--vanilla</span> <span class="at">-e</span> <span class="st">&#39;source(&quot;checkpoint.R&quot;); print(compare(extract(load_data())))&#39;</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">--vanilla</span> checks.R repair.R</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">--vanilla</span> my-check.R repair.R</span></code></pre></div>
+<p>Expect the same three-country comparison, 12/12 checks and the
+additional-case PASS. Include raw snapshots, provenance, your repair,
+extra case and decision note in a handover. Use this fresh-session check
+to confirm that a colleague can reproduce your result.</p>
+<p><strong>Bounded validator:</strong> these helpers cover one complete
+six-record World Bank response for this indicator and these keys. They
+require integer metadata counts (not Boolean/string substitutes), page
+size consistent with the record count, the expected nested
+country/indicator fields, and finite nonnegative numeric values or null.
+R requires unnamed lists for JSON arrays and named objects. Extra
+provider fields are allowed. This is not general pagination, a universal
+JSON validator or a check of the provider’s statistical estimates. A
+different API needs its own documented contract.</p>
+<p>Request narrowly and reuse cached data while debugging. Respect
+provider terms and limits; avoid tight retries. If another API requires
+credentials, keep them out of code, Git and AI prompts. This exercise
+needs none. Next lecture: make these steps readable, reusable,
+documented and testable.</p>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<ul>
+<li><strong>File not found in R:</strong> open the extracted folder and
+set it as terminal working directory. R examples use relative paths
+deliberately.</li>
+<li><strong>Module/package missing:</strong> preflight pandas/jsonlite
+in your chosen runtime; pair rather than install during the timed
+task.</li>
+<li><strong>Manual starter rejects keys:</strong> replace all three TODO
+fields, save, restart. Its initial failure is deliberate.</li>
+<li><strong>Draft checker fails:</strong> expected. Test
+<code>checkpoint</code> to check the environment; then repair your
+copy.</li>
+<li><strong>Null drops an R row:</strong> NULL has length zero; preserve
+its key and convert the value to NA_real_ after checking the field
+exists.</li>
+<li><strong>Live timeout/HTML/error:</strong> stop; inspect the returned
+status/body if saved, and explicitly use OFFLINE data. Do not overwrite
+raw.</li>
+<li><strong>Values change in a new live capture:</strong> retain both
+versions and their provenance; investigate revisions. The approved
+exercise uses the fixed snapshot.</li>
+<li><strong>A passing test feels weak:</strong> ask which plausible
+mistake it would catch. Check exact keys, source associations, one hand
+calculation and edge cases, not just nonempty output.</li>
+</ul>
+<p><a href="#start">Back to start</a> · <a href="#manual">Manual
+task</a> · <a href="#diagnose">Diagnosis</a> · <a href="#ai">AI
+task</a></p>
+<h2 id="omdb">Optional extension — OMDb documentation challenge</h2>
+<p><strong>8 minutes, after the core lecture or as follow-up.</strong>
+Use <a href="https://www.omdbapi.com/">the actual OMDb website</a>
+(Usage and Parameters), not an AI-generated description. Task: design a
+GET request for <em>Inception</em> (2010) as JSON. Choose Python or R.
+No account is needed to design the request; an activated personal API
+key is needed for a live call. <a href="https://www.omdbapi.com/apikey.aspx">Key registration</a>
+currently offers a free 1,000-request/day tier and uses email; delivery
+may be delayed. Do not wait for registration during the task.</p>
+<ol type="1">
+<li><strong>3 min:</strong> identify the endpoint, key parameter,
+single-title versus search parameter, year, movie type and response
+format.</li>
+<li><strong>2 min:</strong> write a URL with <code>YOUR_KEY</code> and
+translate the slide 13 request pattern into your chosen language. Do not
+put a real key in your submission.</li>
+<li><strong>2 min:</strong> predict at least three checks: requested
+title/year/type, HTTP/JSON success, and how an application error should
+stop analysis. Explain why a successful request could still return the
+wrong movie.</li>
+<li><strong>1 min:</strong> partner review. Deliver code/request design,
+predictions and one limitation. Live execution is optional.</li>
+</ol>
+<p><strong>If the website is unavailable:</strong> this instructor
+summary of its documentation is sufficient for the design task: endpoint
+<code>https://www.omdbapi.com/</code>; <code>apikey</code> supplies
+access; <code>t</code> looks up one title while <code>s</code> searches;
+<code>y</code> selects a year; <code>type=movie</code> narrows the type;
+<code>r=json</code> requests JSON. Parameters and key page checked 4
+November 2026. Use the real site when available to establish where each
+choice is documented.</p>
+<details>
+<summary>
+OMDb hints and worked request — reveal after your attempt
+</summary>
+<p>A suitable request design is
+<code>https://www.omdbapi.com/?apikey=YOUR_KEY&amp;t=Inception&amp;y=2010&amp;type=movie&amp;r=json</code>.
+The placeholder is not an activated key. An <code>s</code> search
+requires handling a result list and choosing the right item; it is not
+the same as <code>t</code> lookup. Use HTTPS even though the Usage
+example shows HTTP. <a href="https://www.omdbapi.com/swagger.json">Official API schema</a> also
+lists HTTPS and key authentication.</p>
+<p>For optional live execution, first set <code>OMDB_API_KEY</code>
+privately in your local environment (VS Code terminal environment
+settings or your normal OS environment editor), then open a new
+terminal. Never commit the key, project it or paste it into AI. Copy one
+block to <code>omdb-request.py</code> or <code>omdb-request.R</code> and
+run <code>python3 omdb-request.py</code> or
+<code>Rscript --vanilla omdb-request.R</code>. These blocks stop before
+making a request if no key is set. One attempt only; stop after ten
+seconds if needed. No new packages beyond jsonlite for R.</p>
+<p>Python:</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode python omdb-live-example"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os, json</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> urllib.parse <span class="im">import</span> urlencode</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> urllib.request <span class="im">import</span> urlopen</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>key <span class="op">=</span> os.environ.get(<span class="st">&quot;OMDB_API_KEY&quot;</span>)</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> key:</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">&quot;Set OMDB_API_KEY privately, or use the design-only route&quot;</span>)</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>params <span class="op">=</span> {<span class="st">&quot;apikey&quot;</span>: key, <span class="st">&quot;t&quot;</span>: <span class="st">&quot;Inception&quot;</span>, <span class="st">&quot;y&quot;</span>: <span class="st">&quot;2010&quot;</span>,</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>          <span class="st">&quot;type&quot;</span>: <span class="st">&quot;movie&quot;</span>, <span class="st">&quot;r&quot;</span>: <span class="st">&quot;json&quot;</span>}</span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> urlopen(<span class="st">&quot;https://www.omdbapi.com/?&quot;</span> <span class="op">+</span> urlencode(params), timeout<span class="op">=</span><span class="dv">8</span>) <span class="im">as</span> response:</span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">&quot;HTTP&quot;</span>, response.status)</span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>    movie <span class="op">=</span> json.load(response)</span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> movie.get(<span class="st">&quot;Response&quot;</span>) <span class="op">!=</span> <span class="st">&quot;True&quot;</span>:</span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">&quot;OMDb did not return a successful movie result&quot;</span>)</span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> (movie.get(<span class="st">&quot;Title&quot;</span>), movie.get(<span class="st">&quot;Year&quot;</span>), movie.get(<span class="st">&quot;Type&quot;</span>)) <span class="op">==</span> (<span class="st">&quot;Inception&quot;</span>, <span class="st">&quot;2010&quot;</span>, <span class="st">&quot;movie&quot;</span>)</span>
+<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(movie[<span class="st">&quot;Title&quot;</span>], movie[<span class="st">&quot;Year&quot;</span>])</span></code></pre></div>
+<p>R:</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r omdb-live-example"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>key <span class="ot">&lt;-</span> <span class="fu">Sys.getenv</span>(<span class="st">&quot;OMDB_API_KEY&quot;</span>)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">nzchar</span>(key)) <span class="fu">stop</span>(<span class="st">&quot;Set OMDB_API_KEY privately, or use the design-only route&quot;</span>)</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>params <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">apikey=</span>key, <span class="at">t=</span><span class="st">&quot;Inception&quot;</span>, <span class="at">y=</span><span class="st">&quot;2010&quot;</span>, <span class="at">type=</span><span class="st">&quot;movie&quot;</span>, <span class="at">r=</span><span class="st">&quot;json&quot;</span>)</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>query <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="fu">names</span>(params), <span class="fu">vapply</span>(params, utils<span class="sc">::</span>URLencode, <span class="fu">character</span>(<span class="dv">1</span>), <span class="at">reserved=</span><span class="cn">TRUE</span>),</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">sep=</span><span class="st">&quot;=&quot;</span>, <span class="at">collapse=</span><span class="st">&quot;&amp;&quot;</span>)</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>url <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;https://www.omdbapi.com/?&quot;</span>, query)</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>snapshot <span class="ot">&lt;-</span> <span class="fu">tempfile</span>(<span class="at">fileext=</span><span class="st">&quot;.json&quot;</span>)</span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">timeout=</span><span class="dv">8</span>)</span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a><span class="fu">download.file</span>(url, snapshot, <span class="at">mode=</span><span class="st">&quot;wb&quot;</span>, <span class="at">quiet=</span><span class="cn">TRUE</span>)</span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>movie <span class="ot">&lt;-</span> jsonlite<span class="sc">::</span><span class="fu">fromJSON</span>(snapshot, <span class="at">simplifyVector=</span><span class="cn">FALSE</span>)</span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">identical</span>(movie<span class="sc">$</span>Response, <span class="st">&quot;True&quot;</span>)) <span class="fu">stop</span>(<span class="st">&quot;OMDb did not return a successful movie result&quot;</span>)</span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(<span class="fu">identical</span>(movie<span class="sc">$</span>Title, <span class="st">&quot;Inception&quot;</span>), <span class="fu">identical</span>(movie<span class="sc">$</span>Year, <span class="st">&quot;2010&quot;</span>),</span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a>          <span class="fu">identical</span>(movie<span class="sc">$</span>Type, <span class="st">&quot;movie&quot;</span>))</span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(movie<span class="sc">$</span>Title, movie<span class="sc">$</span>Year, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code></pre></div>
+<p>The R downloader’s return code is not the HTTP status: use the
+browser Network panel if you need to demonstrate it. These are small
+worked requests, not general API clients. Authentication/HTTP/JSON
+errors must stop interpretation. A provider error may appear in the JSON
+body; do not treat an error envelope as film data. Film fields such as
+runtime and ratings require type/unit/missingness checks before
+analysis. No real OMDb film response is included in this pack; offline
+author tests use clearly identified synthetic transport bodies, and
+authenticated live behavior has not been verified because no key was
+supplied. For a durable live analysis, preserve response bytes and
+provenance separately, never replacing the World Bank snapshots.</p>
+</details>
+</body>
+</html>
