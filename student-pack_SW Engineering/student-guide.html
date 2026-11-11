@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang xml:lang>
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>DCM · Software Engineering with AI</title>
+  <style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+  <style type="text/css">body { max-width: 850px; margin: 50px auto; padding: 0 28px; font: 18px/1.6 'Liberation Sans', Arial, sans-serif; color: #17262b; }
+h1 { font-size: 38px; line-height: 1.15; color: #23373b; border-top: 5px solid #6a5acd; padding-top: 25px; }
+h2 { margin-top: 45px; color: #373895; } h3 { color: #465a65; }
+a { color: #a53d7c; } pre { background: #f5f7fa; padding: 18px 22px; border-radius: 10px; overflow-x: auto; }
+code { font-family: 'Liberation Mono', monospace; font-size: .88em; } blockquote { border-left: 5px solid #a53d7c; margin-left: 0; padding: 10px 20px; background: #f9f0f6; }
+table { border-collapse: collapse; width: 100%; } td,th { text-align: left; padding: 10px; border-bottom: 1px solid #dce0ed; }
+@media print { body { margin: 0; font-size: 11pt; } pre { white-space: pre-wrap; } h2,h3 { break-after: avoid; } }
+</style>
+</head>
+<body>
+<h1 id="software-engineering-with-ai-student-guide">Software Engineering
+with AI — student guide</h1>
+<p>DCM · HEC Lausanne · Thursday, 12 November 2026<br />
+<strong>Make the change small. Make the evidence clear.</strong></p>
+<p><a href="#start">Start</a> · <a href="#contract">Contract</a> · <a href="#manual">Manual task</a> · <a href="#tests">Tests</a> · <a href="#ai">AI activity</a> · <a href="#handover">Handover</a> · <a href="#troubleshooting">Troubleshooting</a></p>
+<h2 id="start">Start here</h2>
+<p>Download and extract the supplied <strong>student-pack.zip</strong>
+into a new folder. Open <strong>that extracted folder</strong> in VS
+Code. The pack is self-contained: no sibling lecture, instructor-only
+file, API request, GitHub account, API key or paid AI subscription is
+needed. Use <strong>one language</strong>, not both. Installation is
+before class.</p>
+<p>Python uses the pandas already introduced in the course, plus the
+standard library. R uses jsonlite already used in Week 8, plus base R.
+Quarto and Pandoc are author tools, not student dependencies. Check your
+selected route:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> <span class="at">-c</span> <span class="st">&quot;import pandas; print(&#39;Python ready&#39;)&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">--vanilla</span> <span class="at">-e</span> <span class="st">&#39;library(jsonlite); cat(&quot;R ready\n&quot;)&#39;</span></span></code></pre></div>
+<p>Run all commands from the extracted folder. If your working Python
+launcher is <code>python</code> or <code>py</code>, substitute it
+consistently after verifying pandas is installed in that interpreter. In
+R, using <code>Rscript --vanilla</code> starts a fresh process without
+your saved workspace. Do not spend activity time installing tools: pair
+with a working machine if necessary.</p>
+<p>For class, open this guide and your chosen-language <strong>manual,
+pipeline and my-check</strong> files. <strong>candidate does not exist
+yet:</strong> create it at the start of the AI/partner activity. The
+full file map below is reference; you do not need to read the loader or
+validation internals.</p>
+<h2 id="classroom-route-do-these-steps-in-order">Classroom route — do
+these steps in order</h2>
+<p>Use VS Code <strong>Terminal → New Terminal</strong>, in the
+extracted pack folder. Edit files in the editor and save with
+<strong>Ctrl+S</strong> (macOS <strong>Cmd+S</strong>) before running
+commands. Copy only your language’s command; press Enter. Read the
+terminal output before proceeding.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Open / action</th>
+<th>Success / resume</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Initial demonstration</td>
+<td>Watch instructor run <code>script.py</code> / <code>.R</code></td>
+<td>Three country comparisons; no student edit</td>
+</tr>
+<tr>
+<td><a href="#manual">Manual exercise</a>, 6 min</td>
+<td>Open manual files; two TODO edits</td>
+<td>Same report, BASIC 14/14; everyone then uses pipeline</td>
+</tr>
+<tr>
+<td><a href="#tests">Independent check</a>, 4 min</td>
+<td>Open my-check; change four constants</td>
+<td>PRECISION PASS on pipeline; explain the rounding gap</td>
+</tr>
+<tr>
+<td><a href="#ai">AI/partner exercise</a>, 13 min</td>
+<td>Create candidate; choose IDE, chat-only or offline</td>
+<td>Save candidate, review diff, run both candidate checks</td>
+</tr>
+<tr>
+<td>Final decision, within those 13 min</td>
+<td>Open <code>evidence/review-template.txt</code></td>
+<td>Accept/revise/reject with results and a limitation</td>
+</tr>
+</tbody>
+</table>
+<p><strong>During class:</strong> follow Open, Edit, Run, Expected
+result and If blocked in each activity.
+<strong>Optional/reference:</strong> file map, detailed contract
+explanations, worked-answer panels, sources and full fresh-extraction
+handover. Read those when needed; they are not extra timed tasks. All
+three AI/partner routes are equally legitimate.</p>
+<h3 id="reference-file-map">Reference: file map</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>File</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>script.py</code> / <code>.R</code></td>
+<td>Working but tangled teaching adaptation; run once at the start</td>
+</tr>
+<tr>
+<td><code>manual.py</code>, <code>manual.R</code>,
+<code>manual-run.R</code></td>
+<td>Two small manual edits, with full calculation supplied</td>
+</tr>
+<tr>
+<td><code>pipeline.py</code> / <code>.R</code></td>
+<td>Complete public checkpoint; everyone starts the AI task here</td>
+</tr>
+<tr>
+<td><code>report.py</code> / <code>.R</code></td>
+<td>Explicit report entry point; selects a candidate file</td>
+</tr>
+<tr>
+<td><code>validation.py</code> / <code>.R</code></td>
+<td>Supplied Week 8 guards and local loading; do not edit</td>
+</tr>
+<tr>
+<td><code>runner.py</code> / <code>.R</code></td>
+<td>Loads the explicitly selected candidate; no reference fallback</td>
+</tr>
+<tr>
+<td><code>checks.py</code> / <code>.R</code></td>
+<td>Basic suite: useful but deliberately insufficient for precision</td>
+</tr>
+<tr>
+<td><code>my-check.py</code> / <code>.R</code></td>
+<td>Your independently chosen precision case</td>
+</tr>
+<tr>
+<td><code>proposal.py</code> / <code>.R</code></td>
+<td>Constructed faulty proposal for review and offline fallback</td>
+</tr>
+<tr>
+<td><code>worked.py</code> / <code>.R</code></td>
+<td>Open final worked solution, used only when explicitly selected</td>
+</tr>
+<tr>
+<td><code>data/raw</code>, <code>data/constructed</code></td>
+<td>Authentic captures versus clearly labeled teaching alterations</td>
+</tr>
+<tr>
+<td><code>evidence/review-template.txt</code></td>
+<td>Local prediction and acceptance record</td>
+</tr>
+</tbody>
+</table>
+<p>This is not a new graded submission.</p>
+<h2 id="workflow">Today’s workflow</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Slot</th>
+<th>Work</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>09:15–09:20</td>
+<td>Separate Kahoot; priority subset if time is limited</td>
+</tr>
+<tr>
+<td>09:20–10:05</td>
+<td>Contracts, functions/modules, documentation; six-minute manual
+task</td>
+</tr>
+<tr>
+<td>10:05–10:15</td>
+<td>Break</td>
+</tr>
+<tr>
+<td>10:15–11:00</td>
+<td>Test design; 13-minute AI/partner task; handover and questions</td>
+</tr>
+</tbody>
+</table>
+<p>Each teaching block has 40 committed minutes and five recovery
+minutes. A public checkpoint lets you continue even if an earlier
+activity is unfinished. No interactive names or prior terminal sessions
+are required.</p>
+<h2 id="example">One familiar pipeline</h2>
+<p>A colleague wants to reuse last week’s World Bank population
+comparison. The question remains CHE/DEU/FRA, 2023–2024, indicator
+<code>SP.POP.TOTL</code>. Population is measured in persons; it does not
+measure customer demand. The snapshots and their provenance are copied
+unchanged from Week 8; see <a href="data/README.md">data/README.md</a>
+and <a href="data/provenance.json">provenance</a>. Estimates may be
+revised by the provider; no live retrieval occurs here.</p>
+<p>Run the starting script:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> script.py</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">--vanilla</span> script.R</span></code></pre></div>
+<p>It prints the correct comparison, but combines loading, extraction,
+calculation and display. This is a <strong>teaching adaptation</strong>,
+not a claim that Week 8’s actual code lacked functions. The guarded
+response parsing is supplied so that today’s work focuses on engineering
+boundaries.</p>
+<table>
+<colgroup>
+<col style="width: 15%" />
+<col style="width: 21%" />
+<col style="width: 21%" />
+<col style="width: 21%" />
+<col style="width: 21%" />
+</colgroup>
+<thead>
+<tr>
+<th>Code</th>
+<th style="text-align: right;">Population 2023</th>
+<th style="text-align: right;">Population 2024</th>
+<th style="text-align: right;">Increase</th>
+<th style="text-align: right;">Growth displayed</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CHE</td>
+<td style="text-align: right;">8,888,822</td>
+<td style="text-align: right;">9,005,582</td>
+<td style="text-align: right;">116,760</td>
+<td style="text-align: right;">1.314%</td>
+</tr>
+<tr>
+<td>DEU</td>
+<td style="text-align: right;">83,287,273</td>
+<td style="text-align: right;">83,516,593</td>
+<td style="text-align: right;">229,320</td>
+<td style="text-align: right;">0.275%</td>
+</tr>
+<tr>
+<td>FRA</td>
+<td style="text-align: right;">68,372,286</td>
+<td style="text-align: right;">68,551,653</td>
+<td style="text-align: right;">179,367</td>
+<td style="text-align: right;">0.262%</td>
+</tr>
+</tbody>
+</table>
+<p>Independently check Switzerland: subtract the two source values, then
+divide the increase by the 2023 population and multiply by 100. Keep
+precision until display.</p>
+<h2 id="contract">The agreement we will preserve</h2>
+<p><code>extract(payload)</code> takes the saved parsed response and
+returns six rows, sorted by code and year. Columns are
+<code>country_code</code>, <code>country_name</code>, <code>year</code>,
+<code>population</code>. Source associations matter, not just row count.
+Explicit null becomes Python numeric missingness / R
+<code>NA_real_</code>. An absent required field is an error.</p>
+<p><code>compare(table)</code> takes those rows and returns three rows
+in CHE, DEU, FRA order. Columns in <strong>both Week 9 routes</strong>
+are <code>country_code</code>, <code>population_2023</code>,
+<code>population_2024</code>, <code>increase</code>,
+<code>growth_pct</code>. This explicitly named common schema is a Week 9
+teaching adaptation; Week 8’s Python comparison used an index and
+year-labeled columns. We preserve the Week 9 baseline schema during this
+refactor, alongside Week 8’s data and policies.</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Input or operation</th>
+<th>Expected behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Six valid keys and numeric values</td>
+<td>Preserve source values and names</td>
+</tr>
+<tr>
+<td>Partial page, application error, no observations</td>
+<td>Reject with a useful diagnosis</td>
+</tr>
+<tr>
+<td>Duplicate key, absent field, wrong indicator or Boolean
+population</td>
+<td>Reject</td>
+</tr>
+<tr>
+<td>Explicit null</td>
+<td>Retain the keyed missing row; comparison stops</td>
+</tr>
+<tr>
+<td>Current population = 0, previous &gt; 0</td>
+<td>Valid; percentage change = −100%</td>
+</tr>
+<tr>
+<td>Previous population = 0</td>
+<td>Stop; percentage growth denominator must be positive</td>
+</tr>
+<tr>
+<td>Calculation precision</td>
+<td>Return unrounded numeric results; display may round</td>
+</tr>
+<tr>
+<td>Input objects</td>
+<td>Do not mutate them</td>
+</tr>
+<tr>
+<td>Reusable calculation</td>
+<td>No printing, network calls or file writes</td>
+</tr>
+</tbody>
+</table>
+<p>We are <strong>not</strong> extending the domain to arbitrary
+countries, years or API shapes. That would be a feature with a new
+specification. Tests establish evidence for this bounded task, not
+universal correctness.</p>
+<h3 id="documentation-with-a-job">Documentation with a job</h3>
+<p>A function docstring/comment states purpose, inputs, output units,
+errors and side effects. The README tells a new person how to run the
+whole project. A local comment explains a decision such as why zero
+current population is allowed. You do not need generated documentation
+or a package website.</p>
+<p>Python <code>import pipeline</code> should not print a report. Its
+explicit entry script is <code>report.py</code>; the
+<code>if __name__ == &quot;__main__&quot;:</code> guard keeps calling
+<code>main()</code> separate from importing definitions. In R,
+<code>source(&quot;pipeline.R&quot;)</code> executes definitions and supplied
+setup but should not print a report; <code>report.R</code> is the
+explicit entry script. R source and Python import have different
+semantics; the separation of responsibilities transfers.</p>
+<h2 id="manual">Manual activity: return the calculation</h2>
+<p><strong>Six minutes: one predict, three edit, two run and compare. No
+AI.</strong></p>
+<p>The arithmetic is complete. The starter puts presentation at the end
+of <code>compare</code>. Make the result reusable while keeping the
+script’s displayed answer unchanged. We introduce an internal return
+interface here; afterward, that interface becomes part of the contract
+preserved by the AI task.</p>
+<h3 id="open-and-edit-python">Open and Edit — Python</h3>
+<p>Open <code>manual.py</code>. At TODO A, replace the final
+<code>print(...)</code> with <code>return result</code>. At TODO B,
+replace the single call with assignment plus the same formatted print in
+the caller. Save. <strong>Run</strong> in the terminal:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> manual.py</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> checks.py manual.py</span></code></pre></div>
+<h3 id="open-and-edit-r">Open and Edit — R</h3>
+<p>Open <code>manual.R</code>. At TODO A, replace the three display
+lines with <code>return(result)</code>. Move those display lines into
+<code>manual-run.R</code> after assigning
+<code>result &lt;- compare(extract(load_data()))</code>. Save both.
+<strong>Run</strong> in the terminal:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">--vanilla</span> manual-run.R</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">--vanilla</span> checks.R manual.R</span></code></pre></div>
+<h3 id="expected-result">Expected result</h3>
+<p>Unchanged displayed values and <strong>BASIC 14/14 PASS</strong>.</p>
+<p>The original Python starter returns <code>None</code>; the original R
+starter invisibly returns a display table with a character growth
+column. Neither satisfies the desired reusable numeric-table contract.
+After your edit, the display is unchanged and the basic suite should
+pass 14/14.</p>
+<h3 id="if-blocked">If blocked</h3>
+<p>Open the worked edits below, or stop editing and proceed directly to
+the supplied pipeline checkpoint. Everybody uses that checkpoint next;
+finishing the manual task is not required.</p>
+<details>
+<summary>
+Worked manual edits
+</summary>
+<p>Python: the end of <code>compare</code> becomes
+<code>return result</code>. The entry-point block becomes:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&quot;__main__&quot;</span>:</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="im">from</span> validation <span class="im">import</span> load</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    result <span class="op">=</span> compare(extract(load()))</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(result.to_string(index<span class="op">=</span><span class="va">False</span>, float_format<span class="op">=</span><span class="kw">lambda</span> value: <span class="ss">f&quot;</span><span class="sc">{</span>value<span class="sc">:.3f}</span><span class="ss">&quot;</span>))</span></code></pre></div>
+<p>R: the end of <code>compare</code> becomes
+<code>return(result)</code>. The complete caller is:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;manual.R&quot;</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">compare</span>(<span class="fu">extract</span>(<span class="fu">load_data</span>()))</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>shown <span class="ot">&lt;-</span> result</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>shown<span class="sc">$</span>growth_pct <span class="ot">&lt;-</span> <span class="fu">sprintf</span>(<span class="st">&quot;%.3f&quot;</span>, result<span class="sc">$</span>growth_pct)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(shown, <span class="at">row.names=</span><span class="cn">FALSE</span>)</span></code></pre></div>
+</details>
+<h3 id="required-checkpoint-everyone">Required checkpoint —
+everyone</h3>
+<p>Preserve your attempt. <strong>Everyone now uses the supplied
+<code>pipeline.py</code> / <code>pipeline.R</code></strong>, even if the
+manual exercise was skipped. This transition does not depend on opening
+an answer, finishing TODOs or keeping a terminal session alive.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> checks.py pipeline.py</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> report.py pipeline.py</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">--vanilla</span> checks.R pipeline.R</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">--vanilla</span> report.R pipeline.R</span></code></pre></div>
+<p>Both basic suites report 14/14. Read the candidate path. The report
+prints three country comparisons. The runners never silently substitute
+<code>worked</code> or an unchanged comparison from
+<code>validation</code>.</p>
+<h2 id="tests">Tests: choose expectations before code</h2>
+<p>A unit check targets a small operation; an integration check
+exercises connections. A regression check protects existing behavior and
+may be either small or broad. A function doc example that merely runs is
+not the same as asserting an independently expected value.</p>
+<p>The basic suite covers source fidelity, schema, ordering, errors,
+simple growth and <strong>displayed</strong> precision. It does not
+establish full numeric precision. This deliberate limitation is stated
+in the runner output. No test was removed from previous lectures: this
+is a new, labeled teaching suite.</p>
+<table>
+<thead>
+<tr>
+<th>Constructed input</th>
+<th>Independent expectation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>100 → 110</td>
+<td>10%, since the increase is one tenth</td>
+</tr>
+<tr>
+<td>300 → 400</td>
+<td>100/3 percent, since the increase is one third</td>
+</tr>
+<tr>
+<td>100 → 0</td>
+<td>−100%</td>
+</tr>
+<tr>
+<td>0 → 100</td>
+<td>Comparison stops</td>
+</tr>
+</tbody>
+</table>
+<h3 id="four-minute-test-design-task">Four-minute test-design task</h3>
+<h4 id="open-and-edit">Open and Edit</h4>
+<p>Open <code>my-check.py</code> or <code>my-check.R</code>. The
+supplied runnable case uses CHE, 300 → 400 and expected
+<code>100 / 3</code>. <strong>Minimum supported route:</strong> use DEU,
+600 → 700, expected <code>100 / 6</code>, and explain the arithmetic in
+your own words before using AI. This changes the seed case. Change the
+four constants (<code>CODE</code>, <code>PREVIOUS</code>,
+<code>CURRENT</code>, <code>EXPECTED_PERCENT</code>); keep the rest of
+the scaffold.</p>
+<p><strong>Optional challenge:</strong> choose another ratio and justify
+its expected and rounded values.</p>
+<p><strong>Your case must distinguish full precision from premature
+rounding.</strong> Change the ratio as well as the country, then record
+(1) the expected percentage from your arithmetic, (2) that percentage
+rounded to three decimals, and (3) why their absolute difference exceeds
+<code>1e-9</code> percentage points. For 600 → 700,
+<code>100 / 6 ≈ 16.666666666667</code> differs from <code>16.667</code>
+by about <code>0.000333333333</code> percentage points, so it detects
+rounding. A case such as 100 → 110 gives exactly 10%: rounding to three
+decimals leaves it unchanged, so it cannot detect this fault. Choose for
+this decimal-rounding distinction; binary floating-point representation
+is a separate issue.</p>
+<p>Changing only the country does not satisfy this test-design task. Do
+not claim the unchanged supplied seed as your own test design. These
+numbers are constructed in memory, not real population estimates; raw
+files stay unchanged.</p>
+<h4 id="run">Run</h4>
+<p>Run your chosen case against the checkpoint:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> my-check.py pipeline.py</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">--vanilla</span> my-check.R pipeline.R</span></code></pre></div>
+<h4 id="expected-result-1">Expected result</h4>
+<p>Expected: <code>PRECISION PASS</code>. For the seed, expected and
+actual print as <code>33.333333333333</code>; for 600 → 700 they print
+approximately <code>16.666666666667</code>. The tolerance is an absolute
+<code>1e-9</code> percentage points: enough for floating-point
+representation, too small to accept rounding to thousandths. Never
+loosen it simply to obtain a pass.</p>
+<h4 id="if-blocked-1">If blocked</h4>
+<p>Use the supported four values above, save, and rerun on pipeline.
+Check spelling, quotes around DEU and your filename. Keep this check for
+the next activity. Pair with a working machine if your runtime is
+unavailable.</p>
+<p>The scaffold calls <strong>the selected candidate’s extraction and
+comparison</strong>, so it also tests whether <code>compare</code>
+actually uses a correct helper. A correct helper that is never called
+does not fix the report pipeline.</p>
+<h2 id="ai">AI-assisted activity: inspect, test, decide</h2>
+<p><strong>Thirteen minutes.</strong> Work only in the extracted
+project, with public/constructed data. The course’s responsible-AI rules
+still apply. You own the acceptance decision.</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Minutes</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0–2</td>
+<td>Copy the checkpoint to candidate; confirm your prediction and
+baseline</td>
+</tr>
+<tr>
+<td>2–5</td>
+<td>Request a small plan and proposal; switch to fallback if
+blocked</td>
+</tr>
+<tr>
+<td>5–7</td>
+<td>Read the diff and explain each changed line</td>
+</tr>
+<tr>
+<td>7–11</td>
+<td>Run basic and independent checks on the actual candidate;
+diagnose/revise</td>
+</tr>
+<tr>
+<td>11–13</td>
+<td>Save an evidence note and accept, revise or reject</td>
+</tr>
+</tbody>
+</table>
+<h3 id="open-all-routes">Open — all routes</h3>
+<p>In VS Code Explorer, select <code>pipeline.py</code>, copy and paste
+it in the same folder, and rename the copy <code>candidate.py</code>;
+use <code>pipeline.R</code> → <code>candidate.R</code> for R. Open the
+new candidate. Preserve pipeline as the baseline and your modified
+my-check as your independent test. <strong>Only now does candidate
+exist.</strong></p>
+<h3 id="edit-choose-one-equally-valid-route">Edit — choose one equally
+valid route</h3>
+<p><strong>Route 1 · IDE coding agent with workspace access.</strong>
+Open the agent panel in the extracted folder. Provide candidate plus
+<code>README.md</code> (contract), <code>validation.py</code> /
+<code>.R</code> and <code>checks.py</code> / <code>.R</code> as
+read-only context. Use the bounded prompt below. Permit changes only to
+candidate; review the agent’s proposed edits and save the local file.
+Panel names depend on your installed assistant. If you cannot select the
+folder/files promptly, choose route 2 or 3.</p>
+<p><strong>Route 2 · Chat-only AI in a browser.</strong> A chat response
+does <strong>not</strong> change your local files. In VS Code, open and
+copy the complete text of <code>candidate.py</code> / <code>.R</code>,
+<code>README.md</code>, <code>validation.py</code> / <code>.R</code> and
+<code>checks.py</code> / <code>.R</code>. Paste them into the chat as
+separate code blocks labeled with their filenames; the latter three are
+read-only context. Do not send other projects, credentials or your
+independently designed my-check. Paste the bounded prompt below, then
+add: <strong>“You have no access to my local files or terminal. Return
+one complete replacement candidate file in one code block, with no
+omitted sections or placeholders, followed by a short explanation of
+changed lines. Do not claim you saved or ran anything.”</strong></p>
+<p>When the response arrives, copy only the code inside the candidate
+code block (no backticks or explanation). In the local candidate editor,
+select all, paste the code and save with Ctrl+S / Cmd+S. Check the tab
+filename before replacing anything. If the response is partial, ask once
+for the complete file; switch to route 3 at the three-minute limit. Do
+not execute pasted commands from the chat. Continue with the local diff
+and your own tests below.</p>
+<p><strong>Route 3 · Complete offline partner route.</strong> No
+account, connection or AI is required. Open <code>proposal.py</code> /
+<code>.R</code>, select all and copy its contents. Open candidate,
+select all, paste and save. With a partner, explain the proposed changes
+and run the same review/tests below. This constructed proposal
+intentionally contains a subtle fault. You may choose this route from
+the start.</p>
+<h3 id="concrete-prompt">Concrete prompt</h3>
+<blockquote>
+<p>I am refactoring this offline population-report project. Read my
+candidate file, the contract and the supplied basic checks. First give a
+brief plan.</p>
+<p>Extract the percentage-growth arithmetic from
+<code>compare(table)</code> into
+<code>growth_percent(previous, current)</code> in my candidate file,
+then make <code>compare</code> call it. Add concise documentation of
+inputs, returned units and preconditions.</p>
+<p>The helper receives validated finite numeric scalars: previous must
+be positive, current may be zero. It returns percentage change with full
+calculation precision. The caller keeps validation; formatting and
+rounding belong to the report script.</p>
+<p>Preserve the <code>compare(table)</code> signature, output
+columns/order, useful errors and nonmutation. Preserve extraction
+behavior. Modify only <code>candidate.py</code> (or
+<code>candidate.R</code>), limited to this helper, its documentation and
+the relevant calculation in <code>compare</code>. Do not change data,
+validation, tests, expected answers, dependencies or report formatting.
+No network or reference-solution imports.</p>
+<p>Show the diff and explain changed lines. Report exactly which checks
+you actually ran, and which you did not. I will inspect the changes and
+run independent checks before accepting them.</p>
+</blockquote>
+<p>The helper is internal to this bounded pipeline. Its preconditions
+are enforced by the caller; it does not promise to validate arbitrary
+text, vectors or missing inputs on its own. Adding a second
+general-purpose validator is unnecessary for this task.</p>
+<h3 id="review-all-routes-converge-here">Review — all routes converge
+here</h3>
+<p>In Explorer, right-click <code>pipeline.py</code> → <strong>Select
+for Compare</strong>; right-click <code>candidate.py</code> →
+<strong>Compare with Selected</strong>. R uses the corresponding files.
+Inspect changed files as well as lines. Confirm the formula’s
+denominator, lack of early rounding, unchanged guards and call from
+<code>compare</code>. Prompt instructions do not prevent a tool from
+exceeding scope; inspect what actually changed.</p>
+<h3 id="run-1">Run</h3>
+<p>Open <strong>Terminal → New Terminal</strong> in the extracted
+folder. Run both commands against the <strong>same saved
+candidate</strong>:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> checks.py candidate.py</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> my-check.py candidate.py</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">--vanilla</span> checks.R candidate.R</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">--vanilla</span> my-check.R candidate.R</span></code></pre></div>
+<p>The runners print the selected absolute path and a file fingerprint.
+They check that <code>extract</code> and <code>compare</code> are
+defined in that selected file rather than imported from an unchanged
+reference. This is a diagnostic, not a security sandbox. Read the actual
+diff; do not execute arbitrary unreviewed code.</p>
+<h3 id="expected-result-and-final-decision">Expected result and final
+decision</h3>
+<p><strong>BASIC 14/14 PASS + PRECISION PASS:</strong> review the diff
+and constraints before accepting; state one limitation. <strong>BASIC
+PASS + precision failure:</strong> the returned-value contract is broken
+even if the report looks right. Revise or reject; do not loosen the
+test. Any basic failure also requires diagnosis before acceptance.</p>
+<p>For the offline proposal, expect BASIC 14/14 PASS followed by a
+precision failure and a nonzero exit. A correct AI proposal can pass
+both. Record the actual result, not the result you hoped for.</p>
+<h3 id="if-blocked-complete-offline-partner-route">If blocked — complete
+offline partner route</h3>
+<p>If AI is unavailable or does not produce a bounded proposal within
+three minutes, copy <strong><code>proposal.py</code> / <code>.R</code>
+to <code>candidate.py</code> / <code>.R</code></strong> instead. The
+proposal is explicitly constructed for teaching; it is not a measurement
+of real AI failure frequency. Use the same diff review, commands,
+prediction and decision note. Do not debug an account or connection
+during the activity.</p>
+<p>The prepared proposal gives:</p>
+<table>
+<thead>
+<tr>
+<th>Check</th>
+<th>Expected result in both languages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>checks</code> on <code>proposal</code></td>
+<td><strong>14/14 PASS</strong></td>
+</tr>
+<tr>
+<td><code>my-check</code> on <code>proposal</code></td>
+<td><strong>FAIL</strong>, nonzero exit</td>
+</tr>
+<tr>
+<td>Returned value for 300 → 400</td>
+<td>33.333, incorrectly rounded</td>
+</tr>
+<tr>
+<td>Required value</td>
+<td>Approximately 33.333333333333</td>
+</tr>
+</tbody>
+</table>
+<p>This is the point of the exercise: useful basic tests can still miss
+a violation. An agent may also produce a fully correct proposal; the
+prepared case guarantees everyone can examine the testing
+limitation.</p>
+<details>
+<summary>
+Worked repair and expected solution
+</summary>
+<p>Remove <code>round(..., 3)</code> from the helper. Keep presentation
+rounding in the report. The relevant Python helper is:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> growth_percent(previous, current):</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Return unrounded growth (%) for validated finite numeric scalars.</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co">    Preconditions: previous &gt; 0 and current &gt;= 0; caller checks these.</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="co">    No I/O or mutation.</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">100</span> <span class="op">*</span> (current <span class="op">-</span> previous) <span class="op">/</span> previous</span></code></pre></div>
+<p>The R equivalent is:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Return unrounded growth (%) for validated finite numeric scalars.</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Preconditions: previous &gt; 0, current &gt;= 0; caller checks these.</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co"># No I/O or mutation.</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>growth_percent <span class="ot">&lt;-</span> <span class="cf">function</span>(previous, current) {</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="dv">100</span> <span class="sc">*</span> (current <span class="sc">-</span> previous) <span class="sc">/</span> previous</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>In the existing comparison function, replace only the rate assignment
+with <code>rate = growth_percent(previous, current)</code> in Python or
+<code>rate &lt;- growth_percent(previous, current)</code> in R. Keep
+guards and output assembly unchanged. There is no need to generalize the
+API, change dependencies or reformat the whole project.</p>
+<p>The complete correct files are openly provided as
+<code>worked.py</code> and <code>worked.R</code>; tests load them only
+if you explicitly select them. If blocked, use that reference and still
+explain the difference, execute both checks and disclose that you used
+the worked answer. Do not present reference output as verification of
+your own candidate.</p>
+</details>
+<h3 id="evidence-note">Evidence note</h3>
+<p>Complete <code>evidence/review-template.txt</code>: your prediction;
+candidate filename; relevant changed line; basic and independent
+commands/results; accept/revise/reject with a reason; a remaining
+limitation; AI/partner/reference assistance used. You may record output
+with terminal copy/paste. A green status or the assistant’s narrative is
+not enough.</p>
+<h2 id="handover">Reproducible handover</h2>
+<p>Close old interactive sessions. Open a new terminal in a freshly
+extracted copy. For the distributed final checkpoint:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> report.py worked.py</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> checks.py worked.py</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> my-check.py worked.py</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">--vanilla</span> report.R worked.R</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">--vanilla</span> checks.R worked.R</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">--vanilla</span> my-check.R worked.R</span></code></pre></div>
+<p>To hand over <strong>your own work</strong>, include your
+<code>candidate</code> and your modified <code>my-check</code> alongside
+the pack files, then substitute <code>candidate.py</code> /
+<code>.R</code> in all three commands. State dependencies, working
+directory, input provenance and expected outputs in your README/evidence
+note. The final reference passes both check sets; selected cases do not
+prove all possible behavior. Recreating environments is the next
+lecture.</p>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<ul>
+<li><strong>Missing pandas/jsonlite:</strong> use the existing Week 8
+setup; pair now and fix installation before the next class.</li>
+<li><strong>Missing data or <code>validation.R</code>:</strong> run from
+the extracted folder, not its parent. Python loads data relative to its
+module; R’s documented route uses the pack working directory.</li>
+<li><strong>Wrong candidate:</strong> check the printed
+path/fingerprint. Both commands must name your candidate, not the
+checkpoint.</li>
+<li><strong>Manual exercise unfinished:</strong> continue using the
+public pipeline checkpoint. No answer panel needs to be opened
+first.</li>
+<li><strong>R shows rounded numbers:</strong> inspect the returned
+numeric value with <code>sprintf(&quot;%.12f&quot;, ...)</code>. Display precision
+and calculation precision differ.</li>
+<li><strong>Expected failure:</strong> the prepared proposal should pass
+basic checks and fail precision. A nonzero exit is intentional for that
+demonstration.</li>
+<li><strong>All checks green:</strong> inspect the diff and keep a
+stated limitation; don’t infer universal correctness.</li>
+<li><strong>No AI:</strong> the prepared proposal, complete worked
+solution and partner route support the full activity offline.</li>
+<li><strong>No working runtime:</strong> pair with a working laptop. If
+none is available, compare the printed diff and expected/actual table,
+write your acceptance decision, then run the same commands later. Mark
+this honestly as reasoning without execution.</li>
+</ul>
+<h2 id="sources">Sources and further reading</h2>
+<p>Established principles: <a href="https://refactoring.com/">Fowler on
+refactoring</a>, <a href="https://swcarpentry.github.io/python-novice-inflammation/08-func.html">Software
+Carpentry on functions and documentation</a>, <a href="https://docs.python.org/3/tutorial/modules.html">Python
+modules</a>, <a href="https://docs.python.org/3/library/unittest.html">Python automated
+testing</a>.</p>
+<p>AI-specific operating guidance: <a href="https://docs.github.com/en/copilot/responsible-use/agents">GitHub’s
+responsible-use application card</a> recommends scoped tasks, review and
+testing, and acknowledges incorrect generated code. This lecture makes
+no quantitative productivity or model-reliability claim. The
+scoped-task/review approach also follows the course’s existing
+responsible-AI guidance. External readings are optional; all exercises
+work offline.</p>
+</body>
+</html>

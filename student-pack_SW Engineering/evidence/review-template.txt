@@ -1,0 +1,8 @@
+Prediction (input, expected result and reasoning, before AI):
+Candidate filename:
+Changed line(s) and why they preserve/change the contract:
+Basic check command and observed result:
+Independent check command and observed result:
+Accept / revise / reject, with reason:
+What these checks do not establish:
+AI assistance used (or partner/offline proposal):

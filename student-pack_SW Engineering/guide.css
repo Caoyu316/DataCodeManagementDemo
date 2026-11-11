@@ -1,0 +1,7 @@
+body { max-width: 850px; margin: 50px auto; padding: 0 28px; font: 18px/1.6 'Liberation Sans', Arial, sans-serif; color: #17262b; }
+h1 { font-size: 38px; line-height: 1.15; color: #23373b; border-top: 5px solid #6a5acd; padding-top: 25px; }
+h2 { margin-top: 45px; color: #373895; } h3 { color: #465a65; }
+a { color: #a53d7c; } pre { background: #f5f7fa; padding: 18px 22px; border-radius: 10px; overflow-x: auto; }
+code { font-family: 'Liberation Mono', monospace; font-size: .88em; } blockquote { border-left: 5px solid #a53d7c; margin-left: 0; padding: 10px 20px; background: #f9f0f6; }
+table { border-collapse: collapse; width: 100%; } td,th { text-align: left; padding: 10px; border-bottom: 1px solid #dce0ed; }
+@media print { body { margin: 0; font-size: 11pt; } pre { white-space: pre-wrap; } h2,h3 { break-after: avoid; } }
