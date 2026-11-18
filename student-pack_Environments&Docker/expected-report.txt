@@ -1,0 +1,8 @@
+Supplied expected numerical output; this file is NOT Docker execution evidence.
+country_code  population_2023  population_2024  increase  growth_pct
+         CHE          8888822          9005582    116760       1.314
+         DEU         83287273         83516593    229320       0.275
+         FRA         68372286         68551653    179367       0.262
+BASIC: 14/14. Precision not established.
+PRECISION CHE: expected 33.333333333333; actual 33.333333333333
+PRECISION PASS (absolute tolerance 1e-9 percentage points)

@@ -5,10 +5,10 @@ import math
 import sys
 from runner import candidate
 from validation import load
-CODE = "CHE"
-PREVIOUS = 300
-CURRENT = 400
-EXPECTED_PERCENT = 100 / 3  # hand reasoning: increase is one third of baseline
+CODE = "DEU"
+PREVIOUS = 600
+CURRENT = 700
+EXPECTED_PERCENT = 100 / 6  # hand reasoning: increase is one third of baseline
 # Alternative: choose DEU, 600 -> 700, expected 100/6. Write your reasoning.
 
 def verify(code):

@@ -1,0 +1,21 @@
+{
+  "items": [
+    {
+      "sku": "A",
+      "stock": {
+        "available": 0
+      }
+    },
+    {
+      "sku": "B",
+      "stock": {
+        "available": null
+      }
+    },
+    {
+      "sku": "C",
+      "stock": {}
+    }
+  ],
+  "next_cursor": "page-2"
+}

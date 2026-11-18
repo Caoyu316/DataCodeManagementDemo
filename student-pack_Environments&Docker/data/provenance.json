@@ -1,0 +1,48 @@
+{
+  "source": "World Bank WDI (source 2)",
+  "indicator": "SP.POP.TOTL",
+  "definition": "Midyear resident population estimate",
+  "unit": "persons",
+  "provider_lastupdated": "2026-10-08",
+  "license": "CC BY 4.0",
+  "source_url": "https://data.worldbank.org/indicator/SP.POP.TOTL",
+  "captures": [
+    {
+      "file": "raw/population-2023-2024.json",
+      "url": "https://api.worldbank.org/v2/country/che;fra;deu/indicator/SP.POP.TOTL?date=2023:2024&format=json&per_page=100",
+      "sha256": "4661173ade32f49c0cf4997ce55617e67ccc0ed180d10ce84dc9fecd73f6d5eb",
+      "bytes": 1271,
+      "kind": "genuine captured response",
+      "retrieved_date_utc": "2026-10-29",
+      "http_status": null
+    },
+    {
+      "file": "raw/population-page1.json",
+      "url": "https://api.worldbank.org/v2/country/che;fra;deu/indicator/SP.POP.TOTL?date=2023:2024&format=json&per_page=2",
+      "sha256": "9312f5abe0dc8a81ac038cf504a0666ef7903f465616be4b54ed6a3add0c1b16",
+      "bytes": 487,
+      "kind": "genuine captured response",
+      "retrieved_date_utc": "2026-10-29",
+      "http_status": null
+    },
+    {
+      "file": "raw/invalid-indicator.json",
+      "url": "https://api.worldbank.org/v2/country/che/indicator/NOT.A.REAL.INDICATOR?format=json",
+      "sha256": "f230e5b6d8f652aa544aec29624faa117c27571ce309a7a474584e1cfeb45c1b",
+      "bytes": 102,
+      "kind": "genuine captured response",
+      "retrieved_date_utc": "2026-10-29",
+      "http_status": 200
+    },
+    {
+      "file": "raw/unavailable-year.json",
+      "url": "https://api.worldbank.org/v2/country/che/indicator/SP.POP.TOTL?date=2030&format=json",
+      "sha256": "244e629ceec4b53324246967388d17b706efe2207744b8148d60ea52dbccd264",
+      "bytes": 85,
+      "kind": "genuine captured response",
+      "retrieved_date_utc": "2026-10-29",
+      "http_status": 200
+    }
+  ],
+  "notes": "HTTP headers not retained for full/partial capture. Observation year differs from retrieval date. See approved audit for capture completion times."
+}

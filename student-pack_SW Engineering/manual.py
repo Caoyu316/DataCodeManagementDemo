@@ -46,7 +46,8 @@ def compare(table):
                      "growth_pct": rate})
     result = pd.DataFrame(rows)
     # TODO A: replace this print with return result.
-    print(result.to_string(index=False, float_format=lambda value: f"{value:.3f}"))
+    #print(result.to_string(index=False, float_format=lambda value: f"{value:.3f}"))
+    return result
 
 if __name__ == "__main__":
     from validation import load
